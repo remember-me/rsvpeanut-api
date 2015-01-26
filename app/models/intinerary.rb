@@ -1,4 +1,4 @@
 class Intinerary < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :event
+  has_many :user_ids, :through :user
+  has_many :event_ids, :through :event
 end
