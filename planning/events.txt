@@ -1,0 +1,59 @@
+- API's 
+  -- Eventbrite
+  -- meetup
+  -- songkick
+  --facebook
+  --google calendar
+  -- google maps or leaflet/mapbox
+  
+- DB
+  -- Postgres
+
+Front end
+-- signin(facebook)
+-- map display
+-- your events
+-- filter by type
+-- slidable timeline
+-- no refreshing
+
+
+
+** Possibilities **
+  -- event planner
+  -- pricing
+  -- public transit (b cycle, capmetro)
+  -- email itinerary
+  -- users
+  
+  
+  TODO
+  - divide tasks
+  - wireframe
+  
+  
+**** ENDPOINTS ****
+get - / 
+post - /user
+get - /user/:id
+get - /itinerary/:id
+get - /events/:id
+get - /eventsq=ZIPCODE
+post - /intinerary
+
+TASKS LIST
+Alexa & Jessica
+  - ember
+  - js
+  - foundation integration
+  - map implementation
+Spensera
+ - RSPEC (check out travis ci gem)
+Johnetta & Melizza
+  - DB
+  - API's
+  - server
+   
+
+
+  
