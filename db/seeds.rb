@@ -18,6 +18,8 @@ Event.create([
     lon: '-97.742105',
     lat: '30.269873',
     description: 'old fashioned fun'
+    event_url: 'http://www.meetup.com/austinrb/events/219854095/'
+    source: 'meetup'
   }
 ])
 
