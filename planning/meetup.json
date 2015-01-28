@@ -1,0 +1,38 @@
+{
+"status": "upcoming",
+"visibility": "public",
+"maybe_rsvp_count": 0,
+"venue": {
+"id": 20029522,
+"lon": -97.7444,
+"repinned": false,
+"name": "WP Engine Classroom",
+"state": "TX",
+"address_1": "504 Lavaca St Suite #1000",
+"lat": 30.271898,
+"city": "Austin",
+"country": "us"
+},
+"id": "219013974",
+"utc_offset": -21600000,
+"duration": 7200000,
+"time": 1422489600000,
+"waitlist_count": 0,
+"updated": 1417492975000,
+"yes_rsvp_count": 21,
+"created": 1417492975000,
+"event_url": "http://www.meetup.com/Awesome-Austin-Ansible-Assembly/events/219013974/",
+"description": "<p>Tyler Turk will be giving the State of Ansible introduction (talking about what's newly released in Ansible and any other newsworthy updates from Ansible) followed by two other presentations that will be announced closer to the meetup date.</p> <p>If you have any suggestions for topics, ideas for presentations, or would like to give a talk or show a demo, feel free to reach out to me. I'll add you to the agenda.</p> <p><br/>REMINDER: The event is starting at 6PM, and we suggest being fairly close to on time as the elevators require a key card to ride passed the 7th floor after 6:30PM. Parking in the parking garage is somewhat expensive, so it may be a good idea to park on the street nearby. There will be no parking validations handed out. Thanks!</p> <p>Live Stream: <a href="https://attendee.gotowebinar.com/register/6423257132392084738" class="linkified">https://attendee.gotowebinar.com/register/6423257132392084738</a></p>",
+"name": "AAAA Recommence!",
+"headcount": 0,
+"group": {
+"id": 14358722,
+"created": 1399659220000,
+"group_lat": 30.270000457763672,
+"name": "Awesome Austin Ansible Assembly",
+"group_lon": -97.73999786376953,
+"join_mode": "open",
+"urlname": "Awesome-Austin-Ansible-Assembly",
+"who": "Automatons"
+}
+}
