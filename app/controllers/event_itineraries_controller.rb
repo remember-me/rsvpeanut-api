@@ -1,0 +1,2 @@
+class EventItinerariesController < ApplicationController
+end
