@@ -5,3 +5,26 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Event.create([
+  {
+    name: 'Good ole Hodown',
+    event_type: 'Party',
+    location: '123 Austin St',
+    event_start: 1422461610,
+    event_end: 1422461620,
+    attendees: 50,
+    cost: 3.40,
+    lon: '-97.742105',
+    lat: '30.269873',
+    description: 'old fashioned fun'
+  }
+])
+
+User.create([
+  {
+    username: 'peter',
+    password: 'password'
+  }
+])
+
