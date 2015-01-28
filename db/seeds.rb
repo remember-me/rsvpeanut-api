@@ -15,10 +15,10 @@ Event.create([
     event_end: 1422461620,
     attendees: 50,
     cost: 3.40,
-    lon: '-97.742105',
+    long: '-97.742105',
     lat: '30.269873',
-    description: 'old fashioned fun'
-    event_url: 'http://www.meetup.com/austinrb/events/219854095/'
+    description: 'old fashioned fun',
+    event_url: 'http://www.meetup.com/austinrb/events/219854095/',
     source: 'meetup'
   }
 ])
