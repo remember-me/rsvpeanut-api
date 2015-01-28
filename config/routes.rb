@@ -8,8 +8,8 @@ Rails.application.routes.draw do
     resources :events, except: :destroy
     resources :users, except: [:destroy]
     resources :eventsapi, only: [:index, :show]
-    resources :intineraries do
-      resources :event_itineraries
+    resources :intineraries, only: [:index, :create, :show] do
+      resources :event_itineraries, except: [:destroy,:edit,:new]
     end 
   # end
 
