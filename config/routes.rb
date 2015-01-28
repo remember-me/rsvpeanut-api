@@ -6,9 +6,11 @@ Rails.application.routes.draw do
   root 'welcome#index'
   # namespace :api do
     resources :events, except: :destroy
-    resources :users, except: [:destroy, :index]
+    resources :users, except: [:destroy]
     resources :eventsapi, only: [:index, :show]
-
+    resources :intineraries do
+      resources :event_itineraries
+    end 
   # end
 
   # Example of regular route:
