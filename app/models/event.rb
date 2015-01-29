@@ -6,10 +6,10 @@ class Event < ActiveRecord::Base
   
   @eventbrite_token = 'DUE3OBAFNHYCQEN5E3VV'
   
-  def self.run_eventbrite_query 
+  def self.run_eventbrite_query params
 #     hard coded an address in, it should be changed later
 #     this method maps the local time to the data array
-    url = 'https://www.eventbriteapi.com/v3/events/search/?location.address=1600+Royal+Crest+Drive&location.within=1mi&venue.city=Austin&token=DUE3OBAFNHYCQEN5E3VV'
+    url = 'https://www.eventbriteapi.com/v3/events/search/?location.address=' + params[:address] + '&location.within=' + params[:radius] + '&venue.city=' + params[:city] + '&token=DUE3OBAFNHYCQEN5E3VV'
     
     response = Unirest.get(url, headers: { "Accept" => "application/json" }, parameters: nil, auth:nil)
     data = response.body['events'].map do |e|
