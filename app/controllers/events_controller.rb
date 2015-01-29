@@ -5,11 +5,12 @@ class EventsController < ApplicationController
     render json: eventList, status: 200
   end
   def create
-    @createEntry = Event.create(params)
-    #conditional for save that includes check for event already in DB.
-    if @createEntry = e['url'] 
-      flash[:alert] = 'This event already exists'
+    @createEntry = Event.new(params)
+    if Event.find(@createEntry['url'])
+      flash[:alert] = 'This item exists'
     else
-      flash[:notice] = 'This event was added'
+      @createEntry.save
+    end
+    #conditional for save that includes check for event already in DB.
   end
 end
