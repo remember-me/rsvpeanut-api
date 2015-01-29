@@ -22,10 +22,75 @@ Event.create([
     source: 'meetup'
   }
 ])
-
+Event.create([
+  {
+    name: 'Bad ole Hodown',
+    event_type: 'Party',
+    location: '125 Austin St',
+    event_start: 1422461610,
+    event_end: 1422461620,
+    attendees: 35,
+    cost: 5.00,
+    long: '-97.742105',
+    lat: '30.269873',
+    description: 'bad fashioned fun',
+    event_url: 'http://www.meetup.com/austinrb/events/219854095/',
+    source: 'eventbrite'
+  }
+])
+Event.create([
+  {
+    name: 'Super awesome drunk stuff',
+    event_type: 'Art show',
+    location: '127 Austin St',
+    event_start: 1422461610,
+    event_end: 1422461620,
+    attendees: 37,
+    cost: 5.00,
+    long: '-97.742105',
+    lat: '30.269873',
+    description: 'bad fashioned fun',
+    event_url: 'http://www.meetup.com/austinrb/events/219854095/',
+    source: 'songkick'
+  }
+])
+Event.create([
+  {
+    name: 'Super awesome drunk stuff part 2',
+    event_type: 'Art show',
+    location: '127 Austin St',
+    event_start: 1422461610,
+    event_end: 1422461620,
+    attendees: 37,
+    cost: 5.00,
+    long: '-97.742105',
+    lat: '30.269873',
+    description: 'bad fashioned fun',
+    event_url: 'http://www.meetup.com/austinrb/events/219854095/',
+    source: 'songkick'
+  }
+])
 User.create([
   {
-    username: 'peter',
+    username: 'peter@gmail.com',
+    password: 'password'
+  }
+])
+User.create([
+  {
+    username: 'james@gmail.com',
+    password: 'password'
+  }
+])
+User.create([
+  {
+    username: 'john@gmail.com',
+    password: 'password'
+  }
+])
+User.create([
+  {
+    username: 'judas@gmail.com',
     password: 'password'
   }
 ])

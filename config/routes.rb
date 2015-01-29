@@ -4,6 +4,14 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
+  # namespace :api do
+    resources :events, except: :destroy
+    resources :users, except: [:destroy]
+    resources :eventsapi, only: [:index, :show]
+    resources :intineraries, only: [:index, :create, :show, :delete] do
+      resources :event_itineraries, only: [:destroy,:edit,:new,:show]
+    end 
+  # end
 
 
   # Example of regular route:
