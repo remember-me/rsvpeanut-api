@@ -2,8 +2,10 @@ module API
   class EventsController
     #will need post permissions for all data, need to see how to have ember send us the json and how we can accept it from a single source.
     #possible use of auth?
-    eventList = Events.all  
-    render json: eventList, status: 200
+#     def show
+#       eventList = Events.all  
+#       render json: eventList, status: 200
+#     end
   end
   class EventItinerariesController
     #join table
