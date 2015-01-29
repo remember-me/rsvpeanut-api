@@ -5,12 +5,14 @@ class EventsController < ApplicationController
     render json: eventList, status: 200
   end
   def create
-    @createEntry = Event.new(params)
-    if Event.find(@createEntry['url'])
-      flash[:alert] = 'This item exists'
-    else
-      @createEntry.save
+    @newEvent = Event.new event_params#params will be first:,last:,email:,password:
+    @newEvent.save
+    respond_to do |format|
+      format.json { render :json => @newUser }
     end
-    #conditional for save that includes check for event already in DB.
+  end
+  private
+  def event_params    
+    params.require(:event).permit(:name, :event_type, :location, :event_start, :event_end, :description, :lat, :long, :event_url)
   end
 end

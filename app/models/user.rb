@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   has_many :itinerary
-  def create
+  def create## this may not be needed.
     response = Unirest.post()
     data = response.body['user'].map do |x|
       first = x['first']
