@@ -5,6 +5,10 @@ gem 'ember-rails'
 gem 'devise'
 gem 'gmaps4rails'
 
+
+# unirest for api requests
+gem 'unirest'
+gem 'json'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 # Use postgres as the database for Active Record
