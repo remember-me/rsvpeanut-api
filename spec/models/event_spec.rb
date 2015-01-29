@@ -1,11 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe "gets events" do
-  it "returns a name"
-  it "returns a location"
-  it "returns an event_start"
-  it "returns an event_url"
-  it "returns an source"
+  xit "has a key name" do 
+    @params = {city: "Austin", radius: "2"}
+    @events = Event.run_eventbrite_query(@params)
+    @events.should have_key :name
+  end
+  it "has a key location"
+  it "has a key event_start"
+  it "has a key event_url"
+  it "has a key source"
 end
 
 RSpec.describe Event, :type => :model do
@@ -15,6 +19,7 @@ RSpec.describe Event, :type => :model do
   it "is invalid without an event_url"
   it "is invalid without a source"
 end
+
 
 
 # describe "Events API" do

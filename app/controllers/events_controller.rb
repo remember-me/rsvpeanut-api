@@ -1,10 +1,6 @@
 class EventsController < ApplicationController
-  def index
-    #returns all events from eventbrite API, need to change to pull from her endpoint
-    eventList = Event.all  
+  def show
+    eventList = Events.all  
     render json: eventList, status: 200
-  end
-  def create
-
   end
 end
