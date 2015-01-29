@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20150128220629) do
     t.string   "long"
     t.string   "event_url"
     t.string   "source"
+
   end
 
   create_table "intineraries", force: :cascade do |t|
