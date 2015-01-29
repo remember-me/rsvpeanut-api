@@ -6,10 +6,12 @@ class Event < ActiveRecord::Base
   
   @eventbrite_token = 'DUE3OBAFNHYCQEN5E3VV'
   
-  def self.run_eventbrite_query params
-#     hard coded an address in, it should be changed later
-#     this method maps the local time to the data array
-    url = 'https://www.eventbriteapi.com/v3/events/search/?location.address=' + params[:address] + '&location.within=' + params[:radius] + '&venue.city=' + params[:city] + '&token=DUE3OBAFNHYCQEN5E3VV'
+  def self.run_eventbrite_query params = {city: 'Austin', radius: '1mi'}
+    if params[:address]
+      url = 'https://www.eventbriteapi.com/v3/events/search/?location.address=' + params[:address] + '&location.within=' + params[:radius] + '&venue.city=' + params[:city] + '&token=DUE3OBAFNHYCQEN5E3VV'
+    else
+      url = 'https://www.eventbriteapi.com/v3/events/search/?venue.city=' + params[:city] + '&token=DUE3OBAFNHYCQEN5E3VV'
+    end
     
     response = Unirest.get(url, headers: { "Accept" => "application/json" }, parameters: nil, auth:nil)
     data = response.body['events'].map do |e|
@@ -37,5 +39,12 @@ class Event < ActiveRecord::Base
     end
     data
   end
-    
+  
+  def self.run_meetup_query params
+    url = 'https://api.meetup.com/2/open_events?status=upcoming&radius=' + params[:radius] + '&and_text=False&limited_events=False&desc=False&offset=0&photo-host=public&format=json&zip=78701&page=20&sig_id=184007427&sig=61b25af3b507ebd2c48cd8011bf4a21911caf633'
+  end
+  
+  def self.run_songkick_query params
+  end
+  
 end
