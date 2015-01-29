@@ -40,8 +40,30 @@ class Event < ActiveRecord::Base
     data
   end
   
-  def self.run_meetup_query params
-    url = 'https://api.meetup.com/2/open_events?status=upcoming&radius=' + params[:radius] + '&and_text=False&limited_events=False&desc=False&offset=0&photo-host=public&format=json&zip=78701&page=20&sig_id=184007427&sig=61b25af3b507ebd2c48cd8011bf4a21911caf633'
+  def self.run_meetup_query params = { zipcode: '78701', radius: '2'}
+    url = 'https://api.meetup.com/2/open_events?status=upcoming&radius=' + params[:radius] + '&and_text=False&limited_events=False&desc=False&offset=0&photo-host=public&format=json&zip=' + params[:zipcode] + '&page=20&sig_id=184007427&sig=61b25af3b507ebd2c48cd8011bf4a21911caf633'
+    
+    response = Unirest.get(url, headers: {'Accept' => 'application/json'})
+    data = response.body['results'].map do |e|
+      address = e['venue']['address_1'] if e['venue']
+      lat = e['venue']['lat'].to_f if e['venue']
+      lon = e ['venue']['lon'].to_f if e['venue']
+      end_time = e['time'] + e['duration'] if e['time'] && e['duration']
+      {
+        name: e['name'],
+#         event_type: ,
+        location: address,
+        event_start: e['time'],
+        event_end: end_time,
+        attendees: e['yes_rsvp_count'],
+        description: e['description'],
+        lat: lat,
+        long: lon,
+        event_url: e['event_url']
+        
+      }
+    end
+    data
   end
   
   def self.run_songkick_query params
