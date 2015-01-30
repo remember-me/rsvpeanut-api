@@ -29,7 +29,8 @@ class Event < ActiveRecord::Base
         description: description,
         lat: lat,
         long: long,
-        event_url: e['url']
+        event_url: e['url'],
+        source: 'eventbrite'
       }
 
     end
@@ -78,8 +79,8 @@ class Event < ActiveRecord::Base
           description: e['description'],
           lat: lat,
           long: lon,
-          event_url: e['event_url']
-
+          event_url: e['event_url'],
+          source: 'meetup'
         }
       end
     return data
