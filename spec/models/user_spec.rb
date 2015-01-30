@@ -1,10 +1,21 @@
+require 'rails_helper'
+
 RSpec.describe User, :type => :model do
   fixtures :users
-  xit "has a username" do
-    user = User.create(username: "Spenser", password: "hello")
-    expect(user.username).to eq("Spenser")
-    expect(user.id).to eq(1)
-  end
+
+
+  describe "before password" do
+    before do
+      @user = User.new(username: "Spenser", password: "")
+    end
+
+    it "has a username" do
+      expect(@user.username).to eq("Spenser")
+    end
+
+    xit { should_not be_valid}
+
+    end
   it "fixtures test" do
     user = users(:Fred)
     user = User.create(username: user.username, password: user.password)

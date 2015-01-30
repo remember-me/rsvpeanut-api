@@ -1,17 +1,26 @@
 class Event < ActiveRecord::Base
-  
-  
+
+
   belongs_to :itinerary
   belongs_to :event_itineraries
-  
+  # validates :name, :location, :event_start, :event_url, :source, presence: true
+
   @eventbrite_token = 'DUE3OBAFNHYCQEN5E3VV'
-  
+
   def self.run_eventbrite_query params
 #     hard coded an address in, it should be changed later
 #     this method maps the local time to the data array
-    url = 'https://www.eventbriteapi.com/v3/events/search/?location.address=' + params[:address] + '&location.within=' + params[:radius] + '&venue.city=' + params[:city] + '&token=DUE3OBAFNHYCQEN5E3VV'
-    
-    response = Unirest.get(url, headers: { "Accept" => "application/json" }, parameters: nil, auth:nil)
+    url = 'https://www.eventbriteapi.com/v3/events/search/?location.address='
+            + params[:address] + '&location.within='
+            + params[:radius] + '&venue.city='
+            + params[:city] + '&token=DUE3OBAFNHYCQEN5E3VV'
+
+    response = Unirest.get(
+      url,
+      headers: { "Accept" => "application/json" },
+      parameters: nil,
+      auth:nil
+      )
     data = response.body['events'].map do |e|
       category = e['category']['short_name'] if e['category']
       name = e['name']['text'] if e['name']
@@ -33,9 +42,9 @@ class Event < ActiveRecord::Base
         long: long,
         event_url: e['url']
       }
-        
+
     end
     data
   end
-    
+
 end

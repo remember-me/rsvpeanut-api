@@ -1,3 +1,4 @@
 Fred: 
+  id: "1"
   username: "Fred"
   password: "hello"
