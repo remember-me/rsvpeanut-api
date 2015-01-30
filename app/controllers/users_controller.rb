@@ -12,6 +12,10 @@ class UsersController < ApplicationController
     userList = User.all # restrict access to this
     render json: userList, status: 200
   end
+  def show
+    singleUser = User.find(params[:id])
+    render json: singleUser, status: 200
+  end
   private
   def user_params    
     params.require(:user).permit(:first, :last, :email, :password)
