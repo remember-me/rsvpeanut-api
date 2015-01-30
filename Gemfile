@@ -5,7 +5,8 @@ gem 'ember-rails'
 gem 'devise'
 gem 'gmaps4rails'
 
-
+# rack cors for allow access
+gem 'rack-cors'
 # unirest for api requests
 gem 'unirest'
 gem 'json'
