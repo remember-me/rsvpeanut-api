@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   skip_before_filter  :verify_authenticity_token
- 
+  #need to set up devise for handling user sessions here. 
   def create
     @newUser = User.new user_params#params will be first:,last:,email:,password:
     @newUser.save
