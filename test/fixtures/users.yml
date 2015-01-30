@@ -7,3 +7,8 @@ one:
 two:
   username: MyString
   password: MyString
+
+Fred: 
+  username: "Spenser"
+  password: "hello"
+  

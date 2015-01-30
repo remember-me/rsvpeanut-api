@@ -17,10 +17,14 @@ class EventsController < ApplicationController
     #end
   end
   private
+<<<<<<< HEAD
   #def itin_params
     #params.require(stuff).permit(event_id,)
   #end
   def event_params    
+=======
+  def event_params
+>>>>>>> 60cdfc76afaf881fcd09a3ebc1ca2008634817cd
     params.require(:event).permit(:name, :event_type, :location, :event_start, :event_end, :description, :lat, :long, :event_url)
   end
 end
