@@ -72,25 +72,33 @@ Event.create([
 ])
 User.create([
   {
-    username: 'peter@gmail.com',
+    first: 'Peter',
+    last: 'James',
+    email: 'peter@gmail.com',
     password: 'password'
   }
 ])
 User.create([
   {
-    username: 'james@gmail.com',
+    first: 'James',
+    last: 'Peter',
+    email: 'james@gmail.com',
     password: 'password'
   }
 ])
 User.create([
   {
-    username: 'john@gmail.com',
+    first: 'John',
+    last: 'Goldsmith',
+    email: 'john@gmail.com',
     password: 'password'
   }
 ])
 User.create([
   {
-    username: 'judas@gmail.com',
+    first: 'Judas',
+    last: 'Iscariot',
+    email: 'judas@gmail.com',
     password: 'password'
   }
 ])
