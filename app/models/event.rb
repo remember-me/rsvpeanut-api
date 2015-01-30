@@ -1,26 +1,16 @@
 class Event < ActiveRecord::Base
 
-
   belongs_to :itinerary
   belongs_to :event_itineraries
-  # validates :name, :location, :event_start, :event_url, :source, presence: true
 
-  @eventbrite_token = 'DUE3OBAFNHYCQEN5E3VV'
+  def self.run_eventbrite_query params = {city: 'Austin', radius: '1mi'}
+    if params[:address]
+      url = 'https://www.eventbriteapi.com/v3/events/search/?location.address=' + params[:address] + '&location.within=' + params[:radius] + '&venue.city=' + params[:city] + '&token=DUE3OBAFNHYCQEN5E3VV'
+    else
+      url = 'https://www.eventbriteapi.com/v3/events/search/?venue.city=' + params[:city] + '&token=DUE3OBAFNHYCQEN5E3VV'
+    end
 
-  def self.run_eventbrite_query params
-#     hard coded an address in, it should be changed later
-#     this method maps the local time to the data array
-    url = 'https://www.eventbriteapi.com/v3/events/search/?location.address='
-            + params[:address] + '&location.within='
-            + params[:radius] + '&venue.city='
-            + params[:city] + '&token=DUE3OBAFNHYCQEN5E3VV'
-
-    response = Unirest.get(
-      url,
-      headers: { "Accept" => "application/json" },
-      parameters: nil,
-      auth:nil
-      )
+    response = Unirest.get(url, headers: { "Accept" => "application/json" }, parameters: nil, auth:nil)
     data = response.body['events'].map do |e|
       category = e['category']['short_name'] if e['category']
       name = e['name']['text'] if e['name']
@@ -36,7 +26,7 @@ class Event < ActiveRecord::Base
         location: address,
         event_start: start,
         event_end: end_time,
-#         no data for number of attendees this is for max attendees e['capacity']
+#       no data for number of attendees this is for max attendees e['capacity']
         description: description,
         lat: lat,
         long: long,
@@ -45,6 +35,57 @@ class Event < ActiveRecord::Base
 
     end
     data
+  end
+
+  def self.run_meetup_query params = { zipcode: '78701', radius: '2'}
+    event_categories = [
+      0,              'Arts',         'Business',
+      'Auto',         'Community',    'Dancing',
+      'Education',    7,              'Fashion',
+      'Fitness',      'Food & Drink', 'Games',
+      'LGBT',         'Movements',    'Well-being',
+      'Crafts',       'Languages',    'Lifestyle',
+      'Literature',   19,             'Films',
+      'Music',        'Spirituality', 'Outdoors',
+      'Paranormal',   'Moms & Dads',  'Pets',
+      'Photography',  'Beliefs',      'Sci fi',
+      'Singles',      'Social',       'Sports',
+      'Support',      'Tech',         'Women'
+      ]
+
+    url = "https://api.meetup.com/2/open_events?status=upcoming&radius=#{params[:radius]}&and_text=False&limited_events=False&desc=False&offset=0&photo-host=public&format=json&zip=#{params[:zipcode]}&page=20&sig_id=182809685&sig=1c6a45863c09b08ea6c419a14ab34c7ce2c9d17a"
+
+    if params[:category]
+      category_index = event_categories.find_index(params[:category]).to_s
+      url = "https://api.meetup.com/2/open_events?status=upcoming&radius=#{params[:radius]}&category=#{category_index}&and_text=False&limited_events=False&desc=False&offset=0&photo-host=public&format=json&zip=#{params[:zipcode]}&page=20&sig_id=182809685&sig=35aa9e882e201c5b9b672c1fad17da2376f1a208"
+    end
+
+    response = Unirest.get(url, headers: {'Accept' => 'application/json'})
+    if response.body['results']
+      data = response.body['results'].map do |e|
+        address = e['venue']['address_1'] if e['venue']
+        lat = e['venue']['lat'].to_f if e['venue']
+        lon = e ['venue']['lon'].to_f if e['venue']
+        end_time = e['time'] + e['duration'] if e['time'] && e['duration']
+        {
+          name: e['name'],
+          event_type: params[:category],
+          location: address,
+          event_start: e['time'],
+          event_end: end_time,
+          attendees: e['yes_rsvp_count'],
+          description: e['description'],
+          lat: lat,
+          long: lon,
+          event_url: e['event_url']
+
+        }
+      end
+    return data
+    end
+  end
+
+  def self.run_songkick_query params
   end
 
 end
