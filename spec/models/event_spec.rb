@@ -23,7 +23,7 @@ RSpec.describe "gets events" do
 end
 
 RSpec.describe Event, :type => :model do
-  fixtures: events
+  fixtures :events
 
   it "is invalid without a name" do
   end

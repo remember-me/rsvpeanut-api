@@ -1,94 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: 'Good ole Hodown',
-  event_type: 'Party',
-  location: '123 Austin St',
-  event_start: 1422461610,
-  event_end: 1422461620,
-  attendees: 50,
-  cost: 3.40,
-  long: '-97.742105',
-  lat: '30.269873',
-  description: 'old fashioned fun',
-  event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-  source: 'meetup'
-
-two:
-  name: 'Bad ole Hodown',
-  event_type: 'Party',
-  location: '234 Austin St',
-  event_start: 1422461610,
-  event_end: 1422461620,
-  attendees: 50,
-  cost: 3.40,
-  long: '-97.742105',
-  lat: '30.269873',
-  description: 'young unfashioned fun',
-  event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-  source: 'meetup'
-
-no_name:
-  event_type: 'Party',
-  location: '234 Austin St',
-  event_start: 1422461610,
-  event_end: 1422461620,
-  attendees: 50,
-  cost: 3.40,
-  long: '-97.742105',
-  lat: '30.269873',
-  description: 'young unfashioned fun',
-  event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-  source: 'meetup'
-
-no_location:
-  name: 'Bad ole Hodown',
-  event_type: 'Party',
-  event_start: 1422461610,
-  event_end: 1422461620,
-  attendees: 50,
-  cost: 3.40,
-  long: '-97.742105',
-  lat: '30.269873',
-  description: 'young unfashioned fun',
-  event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-  source: 'meetup'
-
-no_event_start:
-  name: 'Bad ole Hodown',
-  event_type: 'Party',
-  location: '234 Austin St',
-  event_end: 1422461620,
-  attendees: 50,
-  cost: 3.40,
-  long: '-97.742105',
-  lat: '30.269873',
-  description: 'young unfashioned fun',
-  event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-  source: 'meetup'
-
-no_event_url:
-  name: 'Bad ole Hodown',
-  event_type: 'Party',
-  location: '234 Austin St',
-  event_start: 1422461610,
-  event_end: 1422461620,
-  attendees: 50,
-  cost: 3.40,
-  long: '-97.742105',
-  lat: '30.269873',
-  description: 'young unfashioned fun',
-  source: 'meetup'
-
-no_source:
-  name: 'Bad ole Hodown',
-  event_type: 'Party',
-  location: '234 Austin St',
-  event_start: 1422461610,
-  event_end: 1422461620,
-  attendees: 50,
-  cost: 3.40,
-  long: '-97.742105',
-  lat: '30.269873',
-  description: 'young unfashioned fun',
-  event_url: 'http://www.meetup.com/austinrb/events/219854095/',
+  attendees: 50
+  cost: 3.4
+  description: "old fashioned fun"
+  event_end: 1422461620
+  event_start: 1422461610
+  event_type: Party
+  event_url: "http://www.meetup.com/austinrb/events/219854095/"
+  lat: "30.269873"
+  location: "123 Austin St"
+  long: "-97.742105"
+  name: "Good ole Hodown"
+  source: meetup
