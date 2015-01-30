@@ -1,5 +1,10 @@
 class UsersController < ApplicationController
   skip_before_filter  :verify_authenticity_token
+  after_action :access_control_headers
+  def set_access_control_headers
+    headers['Access-Control-Allow-Origin'] = "http://remember-me.github.io"
+    headers['Access-Control-Request-Method'] = %w{GET POST OPTIONS}.join(",")
+  end
   def create
     @newUser = User.new user_params#params will be first:,last:,email:,password:
     @newUser.save
