@@ -6,19 +6,18 @@
 
 | prefix  | Verb   | URI Pattern                                                       | Controller#Action         |
 | --------|--------|-------------------------------------------------------------------|---------------------------|
-| root    | GET    |  /                                                                | event_itineraries#destroy |
-|         |        |                                                                   |                           |
+| root    | GET    | /                                                                 | event_itineraries#destroy |
+| events  | GET    | /events(.:format)                                                 | events#index              |
+|         | POST   | /events(.:format)                                                 | events#create             |
+|new_event   | GET | /events/new(.:format) | events#new |
 
 
 
 
 
 
- #                          Prefix Verb   URI Pattern                                                       Controller#Action
-                           root GET    /                                                                 welcome#index
-                         events GET    /events(.:format)                                                 events#index
-                                POST   /events(.:format)                                                 events#create
-                      new_event GET    /events/new(.:format)                                             events#new
+ #                          Prefix Verb   URI Pattern                                                       Controller#Action                                                 
+                       GET    /events/new(.:format)                                             events#new
                      edit_event GET    /events/:id/edit(.:format)                                        events#edit
                           event GET    /events/:id(.:format)                                             events#show
                                 PATCH  /events/:id(.:format)                                             events#update
