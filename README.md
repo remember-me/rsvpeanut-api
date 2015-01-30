@@ -2,6 +2,18 @@
 # RSVPeanut
   This backend is launched at http://rsvpeanut.herokuapp.com
 
+## API Endpoints
+
+| prefix  | Verb   | URI Pattern                                                       | Controller#Action         |
+| --------|--------|-------------------------------------------------------------------|---------------------------|
+| root    | GET    |  /                                                                | event_itineraries#destroy |
+|         |        |                                                                   |                           |
+
+
+
+
+
+
  #                          Prefix Verb   URI Pattern                                                       Controller#Action
                            root GET    /                                                                 welcome#index
                          events GET    /events(.:format)                                                 events#index
