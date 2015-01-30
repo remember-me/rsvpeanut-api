@@ -25,7 +25,7 @@ module MasterPlan
     
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
-        origins 'http://remember-me.github.io'
+        origins 'http://remember-me.github.io', 'http://localhost:4567'
         resource '*', :headers => :any, :methods => [:get, :post, :options]
       end
     end
