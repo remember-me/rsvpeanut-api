@@ -1,12 +1,9 @@
 class EventsController < ApplicationController
-  after_action :access_control_headers
-  def set_access_control_headers
-    headers['Access-Control-Allow-Origin'] = "http://remember-me.github.io"
-    headers['Access-Control-Request-Method'] = %w{GET POST OPTIONS}.join(",")
-  end
+  
+ 
   def index
     #returns all events from eventbrite API, need to change to pull from her endpoint
-    eventList = Event.run_eventbrite_query({city: 'austin', address: '123 usa street', radius: '1mi'}) #change to params.
+    eventList = Event.all
     render json: eventList, status: 200
   end
   def create
