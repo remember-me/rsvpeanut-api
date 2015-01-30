@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   skip_before_filter  :verify_authenticity_token
+ 
   def create
     @newUser = User.new user_params#params will be first:,last:,email:,password:
     @newUser.save
