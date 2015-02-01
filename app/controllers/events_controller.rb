@@ -10,7 +10,7 @@ class EventsController < ApplicationController
     @newEvent = Event.new event_params#params will be first:,last:,email:,password:
     @newEvent.save
     respond_to do |format|
-      format.json { render :json => {:user => @newEvent} }
+      format.json { render :json => {:event => @newEvent} }
     end
     #@newItin = EventIntinerary.new
     #need returned event id and current user.
