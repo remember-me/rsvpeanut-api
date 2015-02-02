@@ -86,8 +86,23 @@ class Event < ActiveRecord::Base
     return data
     end
   end
-
-  def self.run_songkick_query params
+  
+  def self.run_songkick_query params = { lat: 30.269560, lon: -97.742420 }
+#     this gets all of the location ids to query for events
+    url = "http://api.songkick.com/api/3.0/search/locations.json?location=geo:#{params[:lat].to_s},#{params[:lon].to_s}&apikey=xmhR3tz3sm5O55Xw"
+    response = Unirest.get(url, headers: {'Accept' => 'application/json'})
+    ids = response.body['resultsPage']['results']['location'].map { |e| e['metroArea']['id'] }
+    
+    data = []
+#     this queries for events
+#     ids.uniq.map do |id| 
+#       url = "http://api.songkick.com/api/3.0/metro_areas/#{id}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
+#       data.push Unirest.get(url, headers: {'Accept' => 'application/json'})
+#     end
+    
+    url = "http://api.songkick.com/api/3.0/metro_areas/#{ids.first}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
+    data = Unirest.get(url, headers: {'Accept' => 'application/json'}).body
+    data['resultsPage']['results']['event']
   end
 
 end
