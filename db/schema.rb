@@ -37,10 +37,10 @@ ActiveRecord::Schema.define(version: 20150130152221) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "description"
-    t.string   "lat"
-    t.string   "long"
     t.string   "event_url"
     t.string   "source"
+    t.string   "lat"
+    t.string   "long"
   end
 
   create_table "itineraries", force: :cascade do |t|

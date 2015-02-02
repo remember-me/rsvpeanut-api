@@ -21,6 +21,17 @@ module MasterPlan
     # config.i18n.default_locale = :de
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
+    config.action_dispatch.default_headers.merge!({
+ 'Access-Control-Allow-Origin' => '*',
+ 'Access-Control-Request-Method' => '*'
+})
     config.active_record.raise_in_transactional_callbacks = true
+    
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins 'http://remember-me.github.io', 'http://localhost:4567'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
+    end
   end
 end

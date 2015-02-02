@@ -1,6 +1,5 @@
 class Event < ActiveRecord::Base
-
-  belongs_to :itinerary
+  belongs_to :itineraries
   belongs_to :event_itineraries
 
   def self.run_eventbrite_query params = {city: 'Austin', radius: '1mi'}
