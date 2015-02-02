@@ -68,7 +68,7 @@ class Event < ActiveRecord::Base
         lon = e ['venue']['lon'].to_f if e['venue']
         start = Time.at(e['time']).to_datetime
         end_time = Time.at(e['time'] + e['duration']).to_datetime if e['time'] && e['duration']
-        
+
         {
           name: e['name'],
           event_type: params[:category],
@@ -86,23 +86,42 @@ class Event < ActiveRecord::Base
     return data
     end
   end
-  
+
   def self.run_songkick_query params = { lat: 30.269560, lon: -97.742420 }
 #     this gets all of the location ids to query for events
     url = "http://api.songkick.com/api/3.0/search/locations.json?location=geo:#{params[:lat].to_s},#{params[:lon].to_s}&apikey=xmhR3tz3sm5O55Xw"
     response = Unirest.get(url, headers: {'Accept' => 'application/json'})
     ids = response.body['resultsPage']['results']['location'].map { |e| e['metroArea']['id'] }
-    
     data = []
-#     this queries for events
-#     ids.uniq.map do |id| 
-#       url = "http://api.songkick.com/api/3.0/metro_areas/#{id}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
-#       data.push Unirest.get(url, headers: {'Accept' => 'application/json'})
-#     end
-    
+    # this queries for events
+    # ids.uniq.map do |id|
+    #   url = "http://api.songkick.com/api/3.0/metro_areas/#{id}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
+    #   data.push Unirest.get(url, headers: {'Accept' => 'application/json'})
+    # end
+
     url = "http://api.songkick.com/api/3.0/metro_areas/#{ids.first}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
     data = Unirest.get(url, headers: {'Accept' => 'application/json'}).body
-    data['resultsPage']['results']['event']
+    data = data['resultsPage']['results']['event'].map do |event|
+      event_start = event['start']['time'] if event['start']['time']
+      date_array = event['start']['date'].split("-")
+      date = Date.new(date_array[0].to_i, date_array[1].to_i, date_array[2].to_i).to_datetime
+      {
+        name: event['displayName'],
+        event_type: event['type'],
+        location: event['venue']['displayName'],
+        event_start: date,
+        event_end: nil,
+        attendees: nil,
+        description: nil,
+        lat: event['venue']['lat'],
+        long: event['venue']['lng'],
+        event_url: event['uri'],
+        source: 'songkick'
+      }
+    end
+    return data
+    #   url = "http://api.songkick.com/api/3.0/metro_areas/9171/calendar.json?apikey=xmhR3tz3sm5O55Xw"
+
   end
 
 end
