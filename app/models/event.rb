@@ -70,16 +70,16 @@ class Event < ActiveRecord::Base
         end_time = Time.at(e['time'] + e['duration']).to_datetime if e['time'] && e['duration']
 
         {
-          name: e['name'],
-          event_type: params[:category],
-          location: address,
-          event_start: start,
-          event_end: end_time,
           attendees: e['yes_rsvp_count'],
           description: e['description'],
+          event_end: end_time,
+          event_start: start,
+          event_type: params[:category],
+          event_url: e['event_url'],
+          location: address,
           lat: lat,
           long: lon,
-          event_url: e['event_url'],
+          name: e['name'],
           source: 'meetup'
         }
       end
@@ -89,39 +89,40 @@ class Event < ActiveRecord::Base
 
   def self.run_songkick_query params = { lat: 30.269560, lon: -97.742420 }
 #     this gets all of the location ids to query for events
-    url = "http://api.songkick.com/api/3.0/search/locations.json?location=geo:#{params[:lat].to_s},#{params[:lon].to_s}&apikey=xmhR3tz3sm5O55Xw"
+    url = 'http://api.songkick.com/api/3.0/events.json?location=geo:30.269560,-97.742420&apikey=xmhR3tz3sm5O55Xw'
     response = Unirest.get(url, headers: {'Accept' => 'application/json'})
-    ids = response.body['resultsPage']['results']['location'].map { |e| e['metroArea']['id'] }
-    data = []
-    # this queries for events
-    # ids.uniq.map do |id|
-    #   url = "http://api.songkick.com/api/3.0/metro_areas/#{id}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
-    #   data.push Unirest.get(url, headers: {'Accept' => 'application/json'})
-    # end
-
-    url = "http://api.songkick.com/api/3.0/metro_areas/#{ids.first}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
-    data = Unirest.get(url, headers: {'Accept' => 'application/json'}).body
-    data = data['resultsPage']['results']['event'].map do |event|
-      event_start = event['start']['time'] if event['start']['time']
-      date_array = event['start']['date'].split("-")
-      date = Date.new(date_array[0].to_i, date_array[1].to_i, date_array[2].to_i).to_datetime
-      {
-        name: event['displayName'],
-        event_type: event['type'],
-        location: event['venue']['displayName'],
-        event_start: date,
-        event_end: nil,
-        attendees: nil,
-        description: nil,
-        lat: event['venue']['lat'],
-        long: event['venue']['lng'],
-        event_url: event['uri'],
-        source: 'songkick'
-      }
-    end
-    return data
-    #   url = "http://api.songkick.com/api/3.0/metro_areas/9171/calendar.json?apikey=xmhR3tz3sm5O55Xw"
-
+    events = response.body['resultsPage']['results']['event']
+      .map do |event|
+        event['start']['datetime'] ? datetime = event['start']['datetime'].to_datetime : datetime = nil
+        {
+          attendees: nil,
+          description: nil,
+          event_type: event['type'],
+          event_url: event['uri'],
+          location: event['venue']['displayName'],
+          lat: event['venue']['lat'],
+          long: event['venue']['lng'],
+          name: event['displayName'],
+          source: 'songkick',
+          date_start: event['start']['date'],
+          date_end: nil,
+          time_start: event['start']['time'],
+          time_end: nil,
+          utc_start: datetime,
+          utc_end: nil,
+          venue: event['venue']['displayName']
+        }
+      end
+    return events
+      # url = "http://api.songkick.com/api/3.0/metro_areas/9171/calendar.json?apikey=xmhR3tz3sm5O55Xw"
+      # result = Event.run_songkick_query
+      # url = "http://api.songkick.com/api/3.0/search/locations.json?location=geo:#{30.269560},#{-97.742420}&apikey=xmhR3tz3sm5O55Xw"
+      # url = "http://api.songkick.com/api/3.0/metro_areas/#{ids.first}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
+      # data = Unirest.get(url, headers: {'Accept' => 'application/json'})
+      #         .body['resultsPage']['results']['event']
+      # data = data.map do |query|
+      #   query.body['resultsPage']['results']['event']
+      # end
   end
 
 end
