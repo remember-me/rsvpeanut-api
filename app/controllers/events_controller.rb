@@ -13,7 +13,7 @@ class EventsController < ApplicationController
       format.json { render :json => {:event => @newEvent} }
     end
 
-    @newItin = EventIntineraries.new itin_params
+    @newItin = EventItinerary.new itin_params
     @newItin.save
     #need returned event id and current user.
     respond_to do |format|
@@ -25,6 +25,6 @@ class EventsController < ApplicationController
     params.require(:event_itineraries).permit(:itinerary_id)
   end
   def event_params    
-    params.require(:event).permit(:name, :event_type, :location, :event_start, :event_end, :description, :lat, :long, :event_url,:attendees,:cost,:source)
+    params.require(:event).permit(:name, :event_type, :location, :UTC_start, :UTC_end, :description, :lat, :long, :event_url,:attendees,:cost,:source,:date_start,:date_end,:time_start,:time_end,:venue)
   end
 end

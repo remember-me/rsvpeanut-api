@@ -1,15 +1,15 @@
 class EventItinerariesController < ApplicationController
   skip_before_filter  :verify_authenticity_token
   def show
-    @eventItin = EventIntineraries.find(event_itin_params)
+    @eventItin = EventItineraries.find(event_itin_params)
     render json: @eventItin, status: 200
   end
   def index
-    @itinEvent = EventIntineraries.all
+    @itinEvent = EventItineraries.all
     render json: @itinEvent, status: 200
   end
   def create
-    @newItin = EventIntineraries.new itin_params
+    @newItin = EventItineraries.new itin_params
     @newItin.save
     #need returned event id and current user.
     respond_to do |format|
