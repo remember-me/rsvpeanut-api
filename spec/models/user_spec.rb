@@ -16,7 +16,7 @@ RSpec.describe User, :type => :model do
     xit { should_not be_valid}
 
     end
-  it "fixtures test" do
+  xit "fixtures test" do
     user = users(:Fred)
     user = User.create(username: user.username, password: user.password)
     expect(users(:Fred).username).to eq("Fred")

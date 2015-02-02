@@ -6,19 +6,19 @@ RSpec.describe "gets events" do
     @events = Event.run_eventbrite_query(params)
   end
   it "has a key name" do
-    @events.should have_key :name
+    @events.first.should have_key :name
   end
   it "has a key location" do
-    @events.should have_key :location
+    @events.first.should have_key :location
   end
   it "has a key event_start" do
-    @events.should have_key :event_start
+    @events.first.should have_key :event_start
   end
   it "has a key event_url" do
-    @events.should have_key :event_url
+    @events.first.should have_key :event_url
   end
   it "has a key source" do
-    @events.should have_key :source
+    @events.first.should have_key :source
   end
 end
 
@@ -26,6 +26,7 @@ RSpec.describe Event, :type => :model do
   fixtures :events
 
   it "is invalid without a name" do
+    Event.new(events(:one)).should be_valid
   end
   it "is invalid without a location"
   it "is invalid without an event_start"
