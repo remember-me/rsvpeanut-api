@@ -135,13 +135,6 @@ class Event < ActiveRecord::Base
       end
     return events
       # result = Event.run_songkick_query
-      # url = "http://api.songkick.com/api/3.0/search/locations.json?location=geo:#{30.269560},#{-97.742420}&apikey=xmhR3tz3sm5O55Xw"
-      # url = "http://api.songkick.com/api/3.0/metro_areas/#{ids.first}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
-      # data = Unirest.get(url, headers: {'Accept' => 'application/json'})
-      #         .body['resultsPage']['results']['event']
-      # data = data.map do |query|
-      #   query.body['resultsPage']['results']['event']
-      # end
   end
 
 end
