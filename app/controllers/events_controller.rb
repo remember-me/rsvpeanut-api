@@ -5,7 +5,7 @@ class EventsController < ApplicationController
     #returns all events from eventbrite API, need to change to pull from her endpoint
     @eventbriteList = Event.retrieve_eventbrite_events 
     @songkickList = Event.run_songkick_query 
-    @meetupList = Event.run_meetup_query 
+    @meetupList = Event.retrieve_all_meetup_categories
     render json: [@meetupList, @eventbriteList, @songkickList], status: 200
   end
   def create
