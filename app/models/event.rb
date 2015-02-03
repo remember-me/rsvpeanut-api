@@ -36,73 +36,121 @@ class Event < ActiveRecord::Base
     end
     data
   end
-
-  def self.run_meetup_query params = { zipcode: '78701', radius: '2'}
-    event_categories = [
-      0,              'Arts',         'Business',
-      'Auto',         'Community',    'Dancing',
-      'Education',    7,              'Fashion',
-      'Fitness',      'Food & Drink', 'Games',
-      'LGBT',         'Movements',    'Well-being',
-      'Crafts',       'Languages',    'Lifestyle',
-      'Literature',   19,             'Films',
-      'Music',        'Spirituality', 'Outdoors',
-      'Paranormal',   'Moms & Dads',  'Pets',
-      'Photography',  'Beliefs',      'Sci fi',
-      'Singles',      'Social',       'Sports',
-      'Support',      'Tech',         'Women'
-      ]
-
-    url = "https://api.meetup.com/2/open_events?status=upcoming&radius=#{params[:radius]}&and_text=False&limited_events=False&desc=False&offset=0&photo-host=public&format=json&zip=#{params[:zipcode]}&page=20&sig_id=182809685&sig=1c6a45863c09b08ea6c419a14ab34c7ce2c9d17a"
-
-    if params[:category]
-      category_index = event_categories.find_index(params[:category]).to_s
-      url = "https://api.meetup.com/2/open_events?status=upcoming&radius=#{params[:radius]}&category=#{category_index}&and_text=False&limited_events=False&desc=False&offset=0&photo-host=public&format=json&zip=#{params[:zipcode]}&page=20&sig_id=182809685&sig=35aa9e882e201c5b9b672c1fad17da2376f1a208"
+  def self.retrieve_all_meetup_categories
+    url = "https://api.meetup.com/2/categories"
+    event_categories = Unirest.get(url,
+      headers: {'Accept' => 'application/json'},
+      parameters: {
+        'key' => '2e6f587c31252c43307b4f364215934',
+        'order' => 'shortname',
+        'desc' => 'false',
+        'offset' => '0',
+        'photo-host' => 'public',
+        'format' => 'json',
+        # 'sig' => 'bd0e7c969aba74156e487839a550dd155cb8a9b0',
+        # 'sig_id' => '134482232',
+        'page' => '40'
+        }).body['results']
+    results = event_categories.map do |cat|
+      Event.run_meetup_query({
+         zipcode: '78701',
+         radius: '25',
+         category: cat['name'],
+         category_id: cat['id']
+         })
     end
+      .flatten
+  end
 
-    response = Unirest.get(url, headers: {'Accept' => 'application/json'})
-    if response.body['results']
-      data = response.body['results'].map do |e|
+  def self.run_meetup_query params
+    url = "https://api.meetup.com/2/open_events"
+
+    response = Unirest.get(url,
+      headers: {'Accept' => 'application/json'},
+      parameters: {
+        'key' => '2e6f587c31252c43307b4f364215934',
+        'category' => params[:category_id],
+        'status' => 'upcoming',
+        'radius' => params[:radius],
+        'and_text' => 'False',
+        'limited_events' => 'False',
+        'desc' => 'False',
+        'offset' => '0',
+        'photo-host' => 'public',
+        'format' => 'json',
+        'zip' => params[:zipcode],
+        'page' => '20'
+        }).body['results']
+    if response
+      data = response.map do |e|
         address = e['venue']['address_1'] if e['venue']
         lat = e['venue']['lat'].to_f if e['venue']
         lon = e ['venue']['lon'].to_f if e['venue']
-        start = Time.at(e['time']).to_datetime
+        time = (e['time'] + e['utc_offset'])/1000
+        start = Time.at(time).to_datetime
         end_time = Time.at(e['time'] + e['duration']).to_datetime if e['time'] && e['duration']
-        
+        venue = e['venue']['name'] if e['venue']
         {
-          name: e['name'],
-          event_type: params[:category],
-          location: address,
-          event_start: start,
-          event_end: end_time,
           attendees: e['yes_rsvp_count'],
           description: e['description'],
+          event_type: params[:category],
+          event_url: e['event_url'],
+          location: address,
           lat: lat,
           long: lon,
-          event_url: e['event_url'],
-          source: 'meetup'
+          name: e['name'],
+          source: 'meetup',
+          date_start: nil,
+          date_end: nil,
+          time_start: nil,
+          time_end: nil,
+          utc_start: time,
+          utc_end: nil,
+          venue: venue
         }
       end
     return data
     end
   end
-  
+
   def self.run_songkick_query params = { lat: 30.269560, lon: -97.742420 }
 #     this gets all of the location ids to query for events
-    url = "http://api.songkick.com/api/3.0/search/locations.json?location=geo:#{params[:lat].to_s},#{params[:lon].to_s}&apikey=xmhR3tz3sm5O55Xw"
-    response = Unirest.get(url, headers: {'Accept' => 'application/json'})
-    ids = response.body['resultsPage']['results']['location'].map { |e| e['metroArea']['id'] }
-    
-    data = []
-#     this queries for events
-#     ids.uniq.map do |id| 
-#       url = "http://api.songkick.com/api/3.0/metro_areas/#{id}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
-#       data.push Unirest.get(url, headers: {'Accept' => 'application/json'})
-#     end
-    
-    url = "http://api.songkick.com/api/3.0/metro_areas/#{ids.first}/calendar.json?apikey=xmhR3tz3sm5O55Xw"
-    data = Unirest.get(url, headers: {'Accept' => 'application/json'}).body
-    data['resultsPage']['results']['event']
+    url = 'http://api.songkick.com/api/3.0/events.json'
+    lat = params[:lat].to_s
+    lon = params[:lon].to_s
+    response = Unirest.get(url,
+      headers: {
+        'Accept' => 'application/json'
+        },
+      parameters: {
+        'location' => 'geo:' + lat + ',' + lon,
+        'apikey' => 'xmhR3tz3sm5O55Xw'
+        }
+    ).body['resultsPage']['results']['event']
+
+    events = response.map do |event|
+        event['start']['datetime'] ? datetime = event['start']['datetime'].to_datetime : datetime = nil
+        {
+          attendees: nil,
+          description: nil,
+          event_type: event['type'],
+          event_url: event['uri'],
+          location: event['venue']['displayName'],
+          lat: event['venue']['lat'],
+          long: event['venue']['lng'],
+          name: event['displayName'],
+          source: 'songkick',
+          date_start: event['start']['date'],
+          date_end: nil,
+          time_start: event['start']['time'],
+          time_end: nil,
+          utc_start: datetime,
+          utc_end: nil,
+          venue: event['venue']['displayName']
+        }
+      end
+    return events
+      # result = Event.run_songkick_query
   end
 
 end
