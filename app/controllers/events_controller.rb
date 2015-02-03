@@ -3,7 +3,7 @@ class EventsController < ApplicationController
  
   def index
     #returns all events from eventbrite API, need to change to pull from her endpoint
-    @eventbriteList = Event.run_eventbrite_query 
+    @eventbriteList = Event.retrieve_eventbrite_events 
     @songkickList = Event.run_songkick_query 
     @meetupList = Event.run_meetup_query 
     render json: [@meetupList, @eventbriteList, @songkickList], status: 200
