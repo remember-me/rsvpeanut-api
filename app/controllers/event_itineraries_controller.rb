@@ -9,7 +9,7 @@ class EventItinerariesController < ApplicationController
     render json: @itinEvent, status: 200
   end
   def create
-    @newItin = EventItineraries.new itin_params
+    @newItin = EventItineraries.new event_itin_params
     @newItin.save
     #need returned event id and current user.
     respond_to do |format|
