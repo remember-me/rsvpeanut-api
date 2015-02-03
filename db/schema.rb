@@ -11,36 +11,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150130152221) do
+ActiveRecord::Schema.define(version: 20150202202125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "event_itineraries", force: :cascade do |t|
-    t.integer  "intinerary_id"
+    t.integer  "itinerary_id"
     t.integer  "event_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   add_index "event_itineraries", ["event_id"], name: "index_event_itineraries_on_event_id", using: :btree
-  add_index "event_itineraries", ["intinerary_id"], name: "index_event_itineraries_on_intinerary_id", using: :btree
+  add_index "event_itineraries", ["itinerary_id"], name: "index_event_itineraries_on_itinerary_id", using: :btree
 
   create_table "events", force: :cascade do |t|
     t.string   "name"
     t.string   "event_type"
     t.string   "location"
-    t.datetime "event_start"
-    t.datetime "event_end"
+    t.datetime "UTC_start"
+    t.datetime "UTC_end"
     t.integer  "attendees"
     t.float    "cost"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "description"
-    t.string   "event_url"
-    t.string   "source"
     t.string   "lat"
     t.string   "long"
+    t.string   "event_url"
+    t.string   "source"
+    t.string   "date_start"
+    t.string   "date_end"
+    t.string   "time_start"
+    t.string   "time_end"
+    t.string   "venue"
   end
 
   create_table "itineraries", force: :cascade do |t|
@@ -61,6 +66,6 @@ ActiveRecord::Schema.define(version: 20150130152221) do
   end
 
   add_foreign_key "event_itineraries", "events"
-  add_foreign_key "event_itineraries", "itineraries", column: "intinerary_id"
+  add_foreign_key "event_itineraries", "itineraries"
   add_foreign_key "itineraries", "users"
 end
