@@ -4,10 +4,10 @@ class Event < ActiveRecord::Base
 
   def self.retrieve_eventbrite_events
     params = {
-       zipcode: '60152',
-       lat: 42.2508,
-       lon: -88.6050,
-       radius: '15',
+       zipcode: '78701',
+       lat: 30.269560,
+       lon: -97.742420,
+       radius: '25',
        page: 1
        }
     results = []
