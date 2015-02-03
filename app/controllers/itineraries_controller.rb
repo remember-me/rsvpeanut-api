@@ -10,6 +10,7 @@ class ItinerariesController < ApplicationController
   end
   def create
     @newItinerary = Itinerary.new itin_params
+    @newItinerary.save
     respond_to do |format|
       format.json { render :json =>{ :itineraries => @newItinerary}}
     end

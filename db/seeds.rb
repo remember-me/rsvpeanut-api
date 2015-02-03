@@ -11,15 +11,20 @@ Event.create([
     name: 'Good ole Hodown',
     event_type: 'Party',
     location: '123 Austin St',
-    event_start: 1422461610,
-    event_end: 1422461620,
+    utc_start: 1422461610,
+    utc_end: 1422461620,
     attendees: 50,
     cost: 3.40,
     long: '-97.742105',
     lat: '30.269873',
     description: 'old fashioned fun',
     event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-    source: 'meetup'
+    source: 'meetup',
+    date_start: 'null',
+    date_end: 'null',
+    time_start: 'null',
+    time_end: 'null',
+    venue: 'Bucks country grill'
   }
 ])
 Event.create([
@@ -27,15 +32,20 @@ Event.create([
     name: 'Bad ole Hodown',
     event_type: 'Party',
     location: '125 Austin St',
-    event_start: 1422461610,
-    event_end: 1422461620,
+    utc_start: 1422461610,
+    utc_end: 1422461620,
     attendees: 35,
     cost: 5.00,
     long: '-97.742105',
     lat: '30.269873',
     description: 'bad fashioned fun',
     event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-    source: 'eventbrite'
+    source: 'eventbrite',
+    date_start: 'null',
+    date_end: 'null',
+    time_start: 'null',
+    time_end: 'null',
+    venue: 'Bucks county grill'
   }
 ])
 Event.create([
@@ -43,15 +53,20 @@ Event.create([
     name: 'Super awesome drunk stuff',
     event_type: 'Art show',
     location: '127 Austin St',
-    event_start: 1422461610,
-    event_end: 1422461620,
+    utc_start: 1422461610,
+    utc_end: 1422461620,
     attendees: 37,
     cost: 5.00,
     long: '-97.742105',
     lat: '30.269873',
     description: 'bad fashioned fun',
     event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-    source: 'songkick'
+    source: 'songkick',
+    date_start: 'null',
+    date_end: 'null',
+    time_start: 'null',
+    time_end: 'null',
+    venue: 'Mohawk'
   }
 ])
 Event.create([
@@ -59,15 +74,20 @@ Event.create([
     name: 'Super awesome drunk stuff part 2',
     event_type: 'Art show',
     location: '127 Austin St',
-    event_start: 1422461610,
-    event_end: 1422461620,
+    utc_start: 1422461610,
+    utc_end: 1422461620,
     attendees: 37,
     cost: 5.00,
     long: '-97.742105',
     lat: '30.269873',
     description: 'bad fashioned fun',
     event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-    source: 'songkick'
+    source: 'songkick',
+    date_start: 'null',
+    date_end: 'null',
+    time_start: 'null',
+    time_end: 'null',
+    venue: 'Bucks country grill'
   }
 ])
 User.create([
