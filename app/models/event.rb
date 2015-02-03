@@ -84,11 +84,12 @@ class Event < ActiveRecord::Base
         }).body['results']
     results = event_categories.map do |cat|
       Event.run_meetup_query({
-         zipcode: '78701',
-         radius: '25',
-         category: cat['name'],
-         category_id: cat['id']
-         })
+        lat: 30.269560,
+        lon: -97.742420,
+        radius: '25',
+        category: cat['name'],
+        category_id: cat['id']
+        })
     end
       .flatten
   end
@@ -184,4 +185,25 @@ class Event < ActiveRecord::Base
       # result = Event.run_songkick_query
   end
 
+  # Takes a zipcode (int or string) and returns an object with lat/lon
+  # Return example => {"lat"=>42.24763009999999, "lng"=>-88.6144839}
+  def self.address_to_latlon request_params
+    url = 'http://maps.googleapis.com/maps/api/geocode/json'
+    response = Unirest.get(url,
+      headers: {
+        'Accept' => 'application/json'
+        },
+      parameters: {
+        'address' => request_params['address']
+      }).body['results'].first['geometry']['location']
+      result_params['lat'] = response['lat']
+      result_params['lon'] = response['lon']
+  end
+
+  def self.retrieve_all_events request_params
+     pretty_params = Event.address_to_latlon request_params
+
+
+
+  end
 end
