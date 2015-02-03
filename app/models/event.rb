@@ -197,6 +197,7 @@ class Event < ActiveRecord::Base
 
   def self.retrieve_all_events request_params
      pretty_params = Event.address_to_latlon request_params
+     pretty_params['radius'] = '10'
      return_hash = {}
      return_hash['songkick'] = Event.run_songkick_query pretty_params
      return_hash['meetup'] = Event.retrieve_all_meetup_categories pretty_params
