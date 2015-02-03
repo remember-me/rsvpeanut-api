@@ -36,35 +36,40 @@ class Event < ActiveRecord::Base
     end
     data
   end
+  def self.retrieve_all_meetup_categories
+    url = "https://api.meetup.com/2/categories"
+    event_categories = Unirest.get(url,
+      headers: {'Accept' => 'application/json'},
+      parameters: {
+        'key' => '2e6f587c31252c43307b4f364215934',
+        'order' => 'shortname',
+        'desc' => 'false',
+        'offset' => '0',
+        'photo-host' => 'public',
+        'format' => 'json',
+        # 'sig' => 'bd0e7c969aba74156e487839a550dd155cb8a9b0',
+        # 'sig_id' => '134482232',
+        'page' => '40'
+        }).body['results']
+    results = event_categories.map do |cat|
+      Event.run_meetup_query({
+         zipcode: '78701',
+         radius: '25',
+         category: cat['name'],
+         category_id: cat['id']
+         })
+    end
+      .flatten
+  end
 
-  def self.run_meetup_query params = { zipcode: '78701', radius: '2'}
-    event_categories = [
-      0,              'Arts',         'Business',
-      'Auto',         'Community',    'Dancing',
-      'Education',    7,              'Fashion',
-      'Fitness',      'Food & Drink', 'Games',
-      'LGBT',         'Movements',    'Well-being',
-      'Crafts',       'Languages',    'Lifestyle',
-      'Literature',   19,             'Films',
-      'Music',        'Spirituality', 'Outdoors',
-      'Paranormal',   'Moms & Dads',  'Pets',
-      'Photography',  'Beliefs',      'Sci fi',
-      'Singles',      'Social',       'Sports',
-      'Support',      'Tech',         'Women'
-      ]
-
+  def self.run_meetup_query params
     url = "https://api.meetup.com/2/open_events"
-
-    # if params[:category]
-    #   category_index = event_categories.find_index(params[:category]).to_s
-    #   url = "https://api.meetup.com/2/open_events?status=upcoming&radius=#{params[:radius]}&category=#{category_index}&and_text=False&limited_events=False&desc=False&offset=0&photo-host=public&format=json&zip=#{params[:zipcode]}&page=20&sig_id=182809685&sig=35aa9e882e201c5b9b672c1fad17da2376f1a208"
-    # end
 
     response = Unirest.get(url,
       headers: {'Accept' => 'application/json'},
       parameters: {
-        'sig' => '1c6a45863c09b08ea6c419a14ab34c7ce2c9d17a',
-        'sig_id' => '182809685',
+        'key' => '2e6f587c31252c43307b4f364215934',
+        'category' => params[:category_id],
         'status' => 'upcoming',
         'radius' => params[:radius],
         'and_text' => 'False',
