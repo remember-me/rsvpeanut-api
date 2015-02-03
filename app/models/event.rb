@@ -2,21 +2,14 @@ class Event < ActiveRecord::Base
   belongs_to :itineraries
   belongs_to :event_itineraries
 
-  def self.retrieve_eventbrite_events
-    params = {
-       zipcode: '78701',
-       lat: 30.269560,
-       lon: -97.742420,
-       radius: '25',
-       page: 1
-       }
+  def self.retrieve_eventbrite_events params
     results = []
     initial_response = Event.run_eventbrite_query params
     page_count = initial_response.body['pagination']['page_count'].to_i
     results.push Event.parse_eventbrite_data initial_response
     if  page_count > 1
       (2..page_count).each do |x|
-        params[:page] = x
+        params['page'] = x
         results.push Event.parse_eventbrite_data Event.run_eventbrite_query params
       end
     end
@@ -61,15 +54,15 @@ class Event < ActiveRecord::Base
     eventbrite_token ='DUE3OBAFNHYCQEN5E3VV'
     response = Unirest.get(url, headers: { "Accept" => "application/json" },
       parameters: {
-        'location.latitude' => params[:lat].to_s,
-        'location.longitude' => params[:lon].to_s,
-        'location.within' => params[:radius] + 'mi',
+        'location.latitude' => params['lat'].to_s,
+        'location.longitude' => params['lon'].to_s,
+        'location.within' => params['radius'] + 'mi',
         'token' => eventbrite_token,
-        'page' => params[:page]
+        'page' => params['page']
         })
   end
 
-  def self.retrieve_all_meetup_categories
+  def self.retrieve_all_meetup_categories params
     url = "https://api.meetup.com/2/categories"
     event_categories = Unirest.get(url,
       headers: {'Accept' => 'application/json'},
@@ -84,9 +77,9 @@ class Event < ActiveRecord::Base
         }).body['results']
     results = event_categories.map do |cat|
       Event.run_meetup_query({
-        lat: 30.269560,
-        lon: -97.742420,
-        radius: '25',
+        lat: params['lat'],
+        lon: params['lon'],
+        radius: params['radius'],
         category: cat['name'],
         category_id: cat['id']
         })
@@ -110,8 +103,9 @@ class Event < ActiveRecord::Base
         'offset' => '0',
         'photo-host' => 'public',
         'format' => 'json',
-        'zip' => params[:zipcode],
-        'page' => '20'
+        'lat' => params['lat'],
+        'lon' => params['lon'],
+        'page' => '100'
         }).body['results']
     if response
       data = response.map do |e|
@@ -145,11 +139,11 @@ class Event < ActiveRecord::Base
     end
   end
 
-  def self.run_songkick_query params = { lat: 30.269560, lon: -97.742420 }
+  def self.run_songkick_query params
 #     this gets all of the location ids to query for events
     url = 'http://api.songkick.com/api/3.0/events.json'
-    lat = params[:lat].to_s
-    lon = params[:lon].to_s
+    lat = params['lat'].to_s
+    lon = params['lon'].to_s
     response = Unirest.get(url,
       headers: {
         'Accept' => 'application/json'
@@ -185,7 +179,7 @@ class Event < ActiveRecord::Base
       # result = Event.run_songkick_query
   end
 
-  # Takes a zipcode (int or string) and returns an object with lat/lon
+  # Takes parameters with an address (string) and returns an object with lat/lon
   # Return example => {"lat"=>42.24763009999999, "lng"=>-88.6144839}
   def self.address_to_latlon request_params
     url = 'http://maps.googleapis.com/maps/api/geocode/json'
@@ -196,13 +190,19 @@ class Event < ActiveRecord::Base
       parameters: {
         'address' => request_params['address']
       }).body['results'].first['geometry']['location']
-      result_params['lat'] = response['lat']
-      result_params['lon'] = response['lon']
+      request_params['lat'] = response['lat']
+      request_params['lon'] = response['lng']
+      request_params
   end
 
   def self.retrieve_all_events request_params
      pretty_params = Event.address_to_latlon request_params
-
+     return_hash = {}
+     return_hash['songkick'] = Event.run_songkick_query pretty_params
+     return_hash['meetup'] = Event.retrieve_all_meetup_categories pretty_params
+     return_hash['eventbrite'] = Event.retrieve_eventbrite_events pretty_params
+     return_hash['request_info'] = pretty_params
+     return_hash
 
 
   end
