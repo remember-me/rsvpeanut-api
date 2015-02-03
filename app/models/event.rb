@@ -7,7 +7,7 @@ class Event < ActiveRecord::Base
        zipcode: '60152',
        lat: 42.2508,
        lon: -88.6050,
-       radius: '40',
+       radius: '15',
        page: 1
        }
     results = []
@@ -20,7 +20,7 @@ class Event < ActiveRecord::Base
         results.push Event.parse_eventbrite_data Event.run_eventbrite_query params
       end
     end
-    return results.flatten.count
+    return results.flatten
   end
 
   def self.parse_eventbrite_data unirest_object
@@ -32,19 +32,24 @@ class Event < ActiveRecord::Base
           end_time = e['end']['local'].to_datetime if e['end']
           description = e['description']['text'] if e['description']
           lat = e['venue']['address']['latitude'].to_f if e['venue']['address'] && e['venue']
-          long = e['venue']['address']['longitude'].to_f if e['venue']['address'] && e['venue']
+          lon = e['venue']['address']['longitude'].to_f if e['venue']['address'] && e['venue']
           {
-    #         name: name,
-    #         event_type: category,
-    #         location: address,
-    #         event_start: start,
-    #         event_end: end_time,
-    # #       no data for number of attendees this is for max attendees e['capacity']
-    #         description: description,
-    #         lat: lat,
-    #         long: long,
-    #         event_url: e['url'],
-            source: 'eventbrite'
+            attendees: nil,
+            description: description,
+            event_type: category,
+            event_url: e['url'],
+            location: address,
+            lat: lat,
+            long: lon,
+            name: name,
+            source: 'eventbrite',
+            date_start: nil,
+            date_end: nil,
+            time_start: nil,
+            time_end: nil,
+            utc_start: start,
+            utc_end: end_time,
+            venue: nil
           }
 
         end
