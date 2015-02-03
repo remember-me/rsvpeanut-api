@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  
+  skip_before_filter  :verify_authenticity_token
  
   def index
     #returns all events from eventbrite API, need to change to pull from her endpoint
@@ -12,17 +12,19 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.json { render :json => {:event => @newEvent} }
     end
-    #@newItin = EventIntinerary.new
+
+    @newItin = EventItinerary.new itin_params
+    @newItin.save
     #need returned event id and current user.
-    #respond_to do |format|
-      #format.json { render :json => @newItin}
-    #end
+    respond_to do |format|
+      format.json { render :json =>{:event_itineraries => @newItin}}
+    end
   end
   private
-  #def itin_params
-    #params.require(stuff).permit(event_id,)
-  #end
+  def itin_params
+    params.require(:event_itineraries).permit(:itinerary_id)
+  end
   def event_params    
-    params.require(:event).permit(:name, :event_type, :location, :event_start, :event_end, :description, :lat, :long, :event_url)
+    params.require(:event).permit(:name, :event_type, :location, :UTC_start, :UTC_end, :description, :lat, :long, :event_url,:attendees,:cost,:source,:date_start,:date_end,:time_start,:time_end,:venue)
   end
 end

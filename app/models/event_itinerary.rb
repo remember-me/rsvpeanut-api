@@ -1,4 +1,4 @@
 class EventItinerary < ActiveRecord::Base
-  belongs_to :intineraries
+  belongs_to :itineraries
   belongs_to :event
 end
