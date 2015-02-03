@@ -1,5 +1,8 @@
 require 'rubygems'
 require 'spork'
+# require 'webmock/rspec'
+
+# WebMock.disable_net_connect!(allow_localhost:true)
 #uncomment the following line to use spork with the debugger
 #require 'spork/ext/ruby-debug'
 

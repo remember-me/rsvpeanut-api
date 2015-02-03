@@ -61,6 +61,7 @@ group :development, :test do
     gem 'rb-fsevent'
     gem 'guard-rspec'
     gem 'guard-spork'
+#    gem 'webmock'
   end
 end
 
