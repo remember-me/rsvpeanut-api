@@ -52,6 +52,19 @@ group :development, :test do
   gem 'spring'
 
   #Testing
-  gem 'rspec-rails', '~> 3.0'
+  group :development, :test do
+    gem 'rspec-rails'
+  end
+  
+  group :test do
+    gem 'factory_girl_rails'
+    gem 'rb-fsevent'
+    gem 'guard-rspec'
+    gem 'guard-spork'
+#    gem 'webmock'
+  end
+  
+
+  
 end
 

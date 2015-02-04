@@ -1,74 +1,48 @@
 require 'rails_helper'
+require 'spec_helper'
 
-RSpec.describe "gets events" do
-  before do
-    params = {city: "Austin", radius: "2"}
-    @events = Event.run_eventbrite_query(params)
+describe Event do
+  
+ context 'eventbrite' do
+    subject(:unirestObject) { Event.run_eventbrite_query({ 'lat' => 30.269870, 'lon' => -97.742393, 'radius' => '5' })}
+    
+    context '#run_eventbrite_query' do
+      it { is_expected.to be_kind_of(Object) }
+      
+      it 'response body contains data' do
+        expect(unirestObject.body['events']).not_to be_empty      
+      end    
+    end
+    
+    context '#parse_eventbrite_data' do
+      let(:events){ Event.parse_eventbrite_data unirestObject }
+      subject(:event){ events.first}
+      
+      it 'returns array' do
+        expect(events).to be_kind_of(Array)
+      end
+      
+      it { is_expected.to be_kind_of(Object) }
+      it { is_expected.to have_key(:name) }
+      it { is_expected.to have_key(:event_type) }
+      it { is_expected.to have_key(:location) }
+      it { is_expected.to have_key(:utc_start) }
+      it { is_expected.to have_key(:utc_end) }
+      it { is_expected.to have_key(:attendees) }
+      it { is_expected.to have_key(:cost) }
+      it { is_expected.to have_key(:created_at) }
+      it { is_expected.to have_key(:updated_at) }
+      it { is_expected.to have_key(:description) }
+      it { is_expected.to have_key(:lat) }
+      it { is_expected.to have_key(:long) }
+      it { is_expected.to have_key(:event_url) }
+      it { is_expected.to have_key(:source) }
+      it { is_expected.to have_key(:date_start) }
+      it { is_expected.to have_key(:date_end) }
+      it { is_expected.to have_key(:time_start) }
+      it { is_expected.to have_key(:time_end) }
+      it { is_expected.to have_key(:venue) }     
+    end      
   end
-  it "has a key name" do
-    @events.first.should have_key :name
-  end
-  it "has a key location" do
-    @events.first.should have_key :location
-  end
-  it "has a key event_start" do
-    @events.first.should have_key :event_start
-  end
-  it "has a key event_url" do
-    @events.first.should have_key :event_url
-  end
-  it "has a key source" do
-    @events.first.should have_key :source
-  end
-end
+end  
 
-RSpec.describe Event, :type => :model do
-  fixtures :events
-
-  it "is invalid without a name" do
-    Event.new(events(:one)).should be_valid
-  end
-  it "is invalid without a location"
-  it "is invalid without an event_start"
-  it "is invalid without an event_url"
-  it "is invalid without a source"
-end
-
-
-
-# describe "Events API" do
-#   describe "GET /eventsapi" do
-#     xit "returns all events by zipcode" do
-
-#       events_params = {
-#         "zipcode" => "78701",
-#         "distance" => "5"
-#       }
-#       get 'movies', {}, { "Accept" => "application/json" }
-
-#       expect(response.status).to eq 200
-
-#       body = JSON.parse(response.body)
-#       movie_titles = body.map { |m| m["title"] }
-
-#       expect(movie_titles).to match_array(["The Lord of the Rings",
-#                                            "The Two Towers"])
-#     end
-#   end
-# end
-
-
-
-
-# name: 'Good ole Hodown',
-#   event_type: 'Party',
-#   location: '123 Austin St',
-#   event_start: 1422461610,
-#   event_end: 1422461620,
-#   attendees: 50,
-#   cost: 3.40,
-#   long: '-97.742105',
-#   lat: '30.269873',
-#   description: 'old fashioned fun',
-#   event_url: 'http://www.meetup.com/austinrb/events/219854095/',
-#   source: 'meetup'
