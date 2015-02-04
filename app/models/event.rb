@@ -15,7 +15,6 @@ class Event < ActiveRecord::Base
         results.push Event.parse_eventbrite_data Event.run_eventbrite_query params
       }
       end
-      p threads
       threads.each {|t| t.join;}
     end
     return results.flatten
