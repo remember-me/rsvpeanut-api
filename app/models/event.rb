@@ -7,11 +7,15 @@ class Event < ActiveRecord::Base
     initial_response = Event.run_eventbrite_query params
     page_count = initial_response.body['pagination']['page_count'].to_i
     results.push Event.parse_eventbrite_data initial_response
+    threads = []
     if  page_count > 1
       (2..page_count).each do |x|
+        threads << Thread.new{
         params['page'] = x
         results.push Event.parse_eventbrite_data Event.run_eventbrite_query params
+      }
       end
+      threads.each {|t| t.join;}
     end
     return results.flatten
   end
@@ -64,27 +68,36 @@ class Event < ActiveRecord::Base
 
   def self.retrieve_all_meetup_categories params
     url = "https://api.meetup.com/2/categories"
-    event_categories = Unirest.get(url,
-      headers: {'Accept' => 'application/json'},
-      parameters: {
-        'key' => '2e6f587c31252c43307b4f364215934',
-        'order' => 'shortname',
-        'desc' => 'false',
-        'offset' => '0',
-        'photo-host' => 'public',
-        'format' => 'json',
-        'page' => '40'
-        }).body['results']
-    results = event_categories.map do |cat|
-      Event.run_meetup_query({
-        lat: params['lat'],
-        lon: params['lon'],
-        radius: params['radius'],
-        category: cat['name'],
-        category_id: cat['id']
-        })
+    # event_categories = Unirest.get(url,
+    #   headers: {'Accept' => 'application/json'},
+    #   parameters: {
+    #     'key' => '60c2a4427740447b1d42f233f2e45',
+    #     'order' => 'shortname',
+    #     'desc' => 'false',
+    #     'offset' => '0',
+    #     'photo-host' => 'public',
+    #     'format' => 'json',
+    #     'page' => '40'
+    #     }).body['results']
+    event_categories = EventsHelper.retrieve_meetup_categories
+    threads = []
+    results = []
+    event_categories.each do |group|
+      threads << Thread.new{
+        group.each do |cat|
+          events = Event.run_meetup_query({
+            'lat' => params['lat'],
+            'lon' => params['lon'],
+            'radius' => params['radius'],
+            'category' => cat['name'],
+            'category_id' =>e cat['id']
+            })
+          results << events
+        end
+      }
     end
-      .flatten
+    threads.each {|t| t.join;}
+    results.flatten
   end
 
   def self.run_meetup_query params
@@ -93,10 +106,10 @@ class Event < ActiveRecord::Base
     response = Unirest.get(url,
       headers: {'Accept' => 'application/json'},
       parameters: {
-        'key' => '2e6f587c31252c43307b4f364215934',
-        'category' => params[:category_id],
+        'key' => '60c2a4427740447b1d42f233f2e45',
+        'category' => params['category_id'],
         'status' => 'upcoming',
-        'radius' => params[:radius],
+        'radius' => params['radius'],
         'and_text' => 'False',
         'limited_events' => 'False',
         'desc' => 'False',
@@ -119,7 +132,7 @@ class Event < ActiveRecord::Base
         {
           attendees: e['yes_rsvp_count'],
           description: e['description'],
-          event_type: params[:category],
+          event_type: params['category'],
           event_url: e['event_url'],
           location: address,
           lat: lat,
@@ -199,9 +212,17 @@ class Event < ActiveRecord::Base
      pretty_params = Event.address_to_latlon request_params
      pretty_params['radius'] = '5'
      return_hash = {}
-     return_hash['songkick'] = Event.run_songkick_query pretty_params
+     threads = []
+     threads << Thread.new {
+       return_hash['songkick'] = Event.run_songkick_query pretty_params
+     }
+     threads << Thread.new {
      return_hash['meetup'] = Event.retrieve_all_meetup_categories pretty_params
+     }
+     threads << Thread.new {
      return_hash['eventbrite'] = Event.retrieve_eventbrite_events pretty_params
+     }
+     threads.each {|t| t.join;}
      return_hash['request_info'] = pretty_params
      return_hash
 
