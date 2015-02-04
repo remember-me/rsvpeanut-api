@@ -3,7 +3,7 @@ class EventsController < ApplicationController
  
   def index
     #returns all events from eventbrite API, need to change to pull from her endpoint
-    @eventList = Event.retrieve_all_events params[:address]
+    @eventList = Event.retrieve_all_events params
     render json: @eventList, status: 200
   end
   def create
