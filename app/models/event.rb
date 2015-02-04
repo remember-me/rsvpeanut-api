@@ -108,9 +108,9 @@ class Event < ActiveRecord::Base
       headers: {'Accept' => 'application/json'},
       parameters: {
         'key' => '60c2a4427740447b1d42f233f2e45',
-        'category' => params[:category_id],
+        'category' => params['category_id'],
         'status' => 'upcoming',
-        'radius' => params[:radius],
+        'radius' => params['radius'],
         'and_text' => 'False',
         'limited_events' => 'False',
         'desc' => 'False',
@@ -213,9 +213,17 @@ class Event < ActiveRecord::Base
      pretty_params = Event.address_to_latlon request_params
      pretty_params['radius'] = '5'
      return_hash = {}
-     return_hash['songkick'] = Event.run_songkick_query pretty_params
+     threads = []
+     threads << Thread.new {
+       return_hash['songkick'] = Event.run_songkick_query pretty_params
+     }
+     threads << Thread.new {
      return_hash['meetup'] = Event.retrieve_all_meetup_categories pretty_params
+     }
+     threads << Thread.new {
      return_hash['eventbrite'] = Event.retrieve_eventbrite_events pretty_params
+     }
+     threads.each {|t| t.join;}
      return_hash['request_info'] = pretty_params
      return_hash
 
