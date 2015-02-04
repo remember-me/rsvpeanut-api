@@ -14,7 +14,7 @@ gem 'json'
 gem 'rails', '4.2.0'
 # Use postgres as the database for Active Record
 gem 'pg'
-# Use SCSS for stylesheetsgit 
+# Use SCSS for stylesheetsgit
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -54,4 +54,3 @@ group :development, :test do
   #Testing
   gem 'rspec-rails', '~> 3.0'
 end
-
