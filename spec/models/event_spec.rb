@@ -148,6 +148,9 @@ describe Event do
       it { is_expexted.to have_key(:lon) }
     end 
   end
-
+  
+  # context '#retrieve_all_events' do 
+#     subject(:response)
+#   end
 end  
 
