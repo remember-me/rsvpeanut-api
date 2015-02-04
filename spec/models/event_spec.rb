@@ -94,37 +94,59 @@ describe Event do
   end
   
     context '#run_songkick_query' do
-    let(:events){ Event.run_songkick_query({ lat: 30.269870, lon: -97.742393 })}
-    subject(:event) { events.first }
-      
-    it 'returns array' do
-      expect(events).to be_kind_of(Array)
+      let(:events){ Event.run_songkick_query({ lat: 30.269870, lon: -97.742393 })}
+      subject(:event) { events.first }
+        
+      it 'returns array' do
+        expect(events).to be_kind_of(Array)
+      end
+        
+      it { is_expected.to be_kind_of(Object) }
+      it { is_expected.to have_key(:name) }
+      it { is_expected.to have_key(:event_type) }
+      it { is_expected.to have_key(:location) }
+      it { is_expected.to have_key(:utc_start) }
+      it { is_expected.to have_key(:utc_end) }
+      it { is_expected.to have_key(:attendees) }
+      it { is_expected.to have_key(:cost) }
+      it { is_expected.to have_key(:created_at) }
+      it { is_expected.to have_key(:updated_at) }
+      it { is_expected.to have_key(:description) }
+      it { is_expected.to have_key(:lat) }
+      it { is_expected.to have_key(:long) }
+      it { is_expected.to have_key(:event_url) }
+      it { is_expected.to have_key(:source) }
+      it { is_expected.to have_key(:date_start) }
+      it { is_expected.to have_key(:date_end) }
+      it { is_expected.to have_key(:time_start) }
+      it { is_expected.to have_key(:time_end) }
+      it { is_expected.to have_key(:venue) } 
     end
-      
-    it { is_expected.to be_kind_of(Object) }
-    it { is_expected.to have_key(:name) }
-    it { is_expected.to have_key(:event_type) }
-    it { is_expected.to have_key(:location) }
-    it { is_expected.to have_key(:utc_start) }
-    it { is_expected.to have_key(:utc_end) }
-    it { is_expected.to have_key(:attendees) }
-    it { is_expected.to have_key(:cost) }
-    it { is_expected.to have_key(:created_at) }
-    it { is_expected.to have_key(:updated_at) }
-    it { is_expected.to have_key(:description) }
-    it { is_expected.to have_key(:lat) }
-    it { is_expected.to have_key(:long) }
-    it { is_expected.to have_key(:event_url) }
-    it { is_expected.to have_key(:source) }
-    it { is_expected.to have_key(:date_start) }
-    it { is_expected.to have_key(:date_end) }
-    it { is_expected.to have_key(:time_start) }
-    it { is_expected.to have_key(:time_end) }
-    it { is_expected.to have_key(:venue) } 
-  end
   
   context '#address_to_latlon' do
+    context 'with address' do
+      subject(:params) { Event.address_to_latlon({address: '716 Congress Ave'}) }
     
+      it { is_expected.to be_kind_of(Object) }
+      it { is_expected.to have_key(:lat) }
+      it { is_expexted.to have_key(:lon) }
+    end
+    
+    context 'with city' do
+      subject(:params) { Event.address_to_latlon({ city: 'Austin' }) }
+      
+      it { is_expected.to be_kind_of(Object) }
+      it { is_expected.to have_key(:lat) }
+      it { is_expexted.to have_key(:lon) }
+    end
+    
+    context 'with zipcode' do
+       subject(:params) { Event.address_to_latlon({ zipcode: '78701' }) }
+      
+      it { is_expected.to be_kind_of(Object) }
+      it { is_expected.to have_key(:lat) }
+      it { is_expexted.to have_key(:lon) }
+    end 
   end
 
 end  
