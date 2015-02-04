@@ -87,11 +87,11 @@ class Event < ActiveRecord::Base
       threads << Thread.new{
         group.each do |cat|
           events = Event.run_meetup_query({
-            lat: params['lat'],
-            lon: params['lon'],
-            radius: params['radius'],
-            category: cat['name'],
-            category_id: cat['id']
+            'lat' => params['lat'],
+            'lon' => params['lon'],
+            'radius' => params['radius'],
+            'category' => cat['name'],
+            'category_id' =>e cat['id']
             })
           results << events
         end
@@ -133,7 +133,7 @@ class Event < ActiveRecord::Base
         {
           attendees: e['yes_rsvp_count'],
           description: e['description'],
-          event_type: params[:category],
+          event_type: params['category'],
           event_url: e['event_url'],
           location: address,
           lat: lat,
