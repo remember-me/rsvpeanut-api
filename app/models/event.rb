@@ -90,7 +90,7 @@ class Event < ActiveRecord::Base
             'lon' => params['lon'],
             'radius' => params['radius'],
             'category' => cat['name'],
-            'category_id' =>e cat['id']
+            'category_id' => cat['id']
             })
           results << events
         end
