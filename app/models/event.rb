@@ -90,7 +90,7 @@ class Event < ActiveRecord::Base
             'lon' => params['lon'],
             'radius' => params['radius'],
             'category' => cat['name'],
-            'category_id' =>e cat['id']
+            'category_id' => cat['id']
             })
           results << events
         end
@@ -211,20 +211,22 @@ class Event < ActiveRecord::Base
   def self.retrieve_all_events request_params
      pretty_params = Event.address_to_latlon request_params
      pretty_params['radius'] = '5'
-     return_hash = {}
+     return_hash = {'events' => []}
      threads = []
      threads << Thread.new {
-       return_hash['songkick'] = Event.run_songkick_query pretty_params
+       return_hash['events'].push Event.run_songkick_query pretty_params
      }
      threads << Thread.new {
-     return_hash['meetup'] = Event.retrieve_all_meetup_categories pretty_params
+     return_hash['events'].push Event.retrieve_all_meetup_categories pretty_params
      }
      threads << Thread.new {
-     return_hash['eventbrite'] = Event.retrieve_eventbrite_events pretty_params
+     return_hash['events'].push Event.retrieve_eventbrite_events pretty_params
      }
      threads.each {|t| t.join;}
-     return_hash['request_info'] = pretty_params
-     return_hash
+     return_hash['events'] = return_hash['events'].flatten
+     return_hash['events'].each_with_index do |event, number|
+       event['id'] = (number+1).to_s
+     end
 
 
   end
