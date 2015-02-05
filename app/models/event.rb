@@ -30,8 +30,10 @@ class Event < ActiveRecord::Base
           description = e['description']['text'] if e['description']
           lat = e['venue']['address']['latitude'].to_f if e['venue']['address'] && e['venue']
           lon = e['venue']['address']['longitude'].to_f if e['venue']['address'] && e['venue']
+          cost = e['cost']['display'] if e['cost']['display']
           {
             attendees: nil,
+            cost: cost,
             description: description,
             event_type: category,
             event_url: e['url'],
@@ -68,17 +70,6 @@ class Event < ActiveRecord::Base
 
   def self.retrieve_all_meetup_categories params
     url = "https://api.meetup.com/2/categories"
-    # event_categories = Unirest.get(url,
-    #   headers: {'Accept' => 'application/json'},
-    #   parameters: {
-    #     'key' => '60c2a4427740447b1d42f233f2e45',
-    #     'order' => 'shortname',
-    #     'desc' => 'false',
-    #     'offset' => '0',
-    #     'photo-host' => 'public',
-    #     'format' => 'json',
-    #     'page' => '40'
-    #     }).body['results']
     event_categories = EventsHelper.retrieve_meetup_categories
     threads = []
     results = []
