@@ -14,6 +14,16 @@ class ItinerariesController < ApplicationController
     respond_to do |format|
       format.json { render :json =>{ :itineraries => @newItinerary}}
     end
+    @newEvent = Event.new event_params
+    @newEvent.save
+    respond_to do |format|
+      format.json { render :json => {:event => @newEvent} }
+    end
+    @newEventItin = EventItinerary.new itin_params
+    @newEventItin.save
+    respond_to do |format|
+      format.json { render :json =>{:event_itineraries => @newEventItin}}
+    end
   end 
   private
   def itin_params

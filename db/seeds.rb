@@ -122,4 +122,18 @@ User.create([
     password: 'password'
   }
 ])
-
+Itinerary.create([
+    {
+        user_id:1
+    }
+    ])
+Itinerary.create([
+    {
+        user_id:2
+    }
+    ])
+Itinerary.create([
+    {
+        user_id:3
+    }
+    ])

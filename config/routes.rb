@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   root 'welcome#index'
   # namespace :api do
     resources :events, except: :destroy
-    resources :users, except: [:destroy]# may need to add itin.
+    resources :users, except: [:destroy] do 
+      resources :itineraries, only: [:create,:index]
+    end
     resources :eventsapi, only: [:index, :show]
     resources :itineraries, only: [:index, :create, :show, :delete, :new] do
       resources :event_itineraries, only: [:destroy,:edit,:new,:show]
