@@ -4,13 +4,17 @@ require 'spec_helper'
 describe Event do
   
  context 'eventbrite' do
-    subject(:unirestObject) { Event.run_eventbrite_query({ 'lat' => 30.269870, 'lon' => -97.742393, 'radius' => '5' })}
+    VCR.use_cassette('eventbrite') do
+      @event = Event.run_eventbrite_query({ 'lat' => 30.269870, 'lon' => -97.742393, 'radius' => '5' })
+    end
+    
+      subject(:unirestObject) { Event.run_eventbrite_query({ 'lat' => 30.269870, 'lon' => -97.742393, 'radius' => '5' })}
     
     context '#run_eventbrite_query' do
       it { is_expected.to be_kind_of(Object) }
       
       it 'response body contains data' do
-        expect(unirestObject.body['events']).not_to be_empty      
+        expect(unirestObject.body['events']).not_to be_empty     
       end    
     end
     
