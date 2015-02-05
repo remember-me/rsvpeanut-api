@@ -3,11 +3,7 @@ require 'spec_helper'
 
 describe Event do
   
- context 'eventbrite' do
-    VCR.use_cassette('eventbrite') do
-      @event = Event.run_eventbrite_query({ 'lat' => 30.269870, 'lon' => -97.742393, 'radius' => '5' })
-    end
-    
+ context 'eventbrite' do    
       subject(:unirestObject) { Event.run_eventbrite_query({ 'lat' => 30.269870, 'lon' => -97.742393, 'radius' => '5' })}
     
     context '#run_eventbrite_query' do
@@ -67,7 +63,7 @@ describe Event do
     end
     
     context '#run_meetup_query' do 
-      let(:events){ Event.run_meetup_query({category_id: '1', radius: '25', lat: 30.269870, lon: -97.742393 })}
+      let(:events){ Event.run_meetup_query({category_id: '1', radius: '25', 'lat' => 30.269870, 'lon' => -97.742393 })}
       subject(:event) { events.first}
         
       it 'returns array' do
