@@ -1,4 +1,3 @@
-require 'byebug'
 class ItinerariesController < ApplicationController
   skip_before_filter  :verify_authenticity_token
 
@@ -16,18 +15,16 @@ class ItinerariesController < ApplicationController
     @newItinerary = Itinerary.new itin_params
     @newItinerary.save
 
-    @eventArray = event_array#unpermitted parameters
+    @eventArray = event_array
     @eventArray.each do |event|
-      event = Event.new(event)  #iterate through
-
+      event = Event.new(event)  #iterate through, add event itinerary to each one with itinerary ID from first save.
       event.save
+      @newEventItin = EventItinerary.new(:event_id => event[:id],:itinerary_id => @newItinerary[:id])
+      @newEventItin.save
     end
-
-    @newEventItin = EventItinerary.new(params[:id])#is not pulling in the returned itin ID or event ID.
-    @newEventItin.save
     
     respond_to do |format|
-      format.json { render :json => [{:event => @newEvent},{ :itineraries => @newItinerary},{:event_itineraries => @newEventItin} ]}
+      format.json { render :json => [{:event => @eventArray},{ :itineraries => @newItinerary},{:event_itineraries => @newEventItin} ]}
     end
   end 
   private
