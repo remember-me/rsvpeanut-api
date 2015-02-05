@@ -9,15 +9,22 @@ class UsersController < ApplicationController
     end
   end
   def index
-    userList = User.all # restrict access to this
-    render json: userList, status: 200
+    @singleUser = User.find login_params
+    respond_to do |format|
+      format.json {render :json =>{ :user => @singleUser}}
+    end
   end
   def show
-    singleUser = User.find(params[:id])
-    render json: singleUser, status: 200
+    @singleUser = User.find user_params
+    respond_to do |format|
+      format.json {render :json =>{ :user => @singleUser}}
+    end
   end
   private
   def user_params    
     params.require(:user).permit(:first, :last, :email, :password)
+  end
+  def login_params    
+    params.require(:user).permit(:email, :password)
   end
 end
