@@ -31,7 +31,7 @@ class Event < ActiveRecord::Base
           lat = e['venue']['address']['latitude'].to_f if e['venue']['address'] && e['venue']
           lon = e['venue']['address']['longitude'].to_f if e['venue']['address'] && e['venue']
           venue = e['venue']['name'] if e['venue']
-          if e['ticket_classes'] && e['ticket_classes'].first['cost'] && !e['ticket_classes'].first['free']
+          if e['ticket_classes'] && e['ticket_classes'].first && e['ticket_classes'].first['cost'] && !e['ticket_classes'].first['free']
             cost = e['ticket_classes'].first['cost']['display']
           else
             cost = "$0.00"

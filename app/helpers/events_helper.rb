@@ -120,4 +120,4 @@ end
 #   "lat"=>42.2486332,
 #   "lon"=>-88.6084269
 #   }
-#   results = Event.retrieve_all_events params
+  # results = Event.retrieve_all_events params
