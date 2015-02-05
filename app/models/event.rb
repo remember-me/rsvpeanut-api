@@ -30,7 +30,12 @@ class Event < ActiveRecord::Base
           description = e['description']['text'] if e['description']
           lat = e['venue']['address']['latitude'].to_f if e['venue']['address'] && e['venue']
           lon = e['venue']['address']['longitude'].to_f if e['venue']['address'] && e['venue']
-          cost = e['cost']['display'] if e['cost']['display']
+          venue = e['venue']['name'] if e['venue']
+          if e['ticket_classes'] && e['ticket_classes'].first['cost'] && !e['ticket_classes'].first['free']
+            cost = e['ticket_classes'].first['cost']['display']
+          else
+            cost = "$0.00"
+          end
           {
             attendees: nil,
             cost: cost,
@@ -42,13 +47,9 @@ class Event < ActiveRecord::Base
             long: lon,
             name: name,
             source: 'eventbrite',
-            date_start: nil,
-            date_end: nil,
-            time_start: nil,
-            time_end: nil,
             utc_start: start,
             utc_end: end_time,
-            venue: nil
+            venue: venue
           }
 
         end
@@ -120,8 +121,10 @@ class Event < ActiveRecord::Base
         start = Time.at(time).to_datetime
         end_time = Time.at(e['time'] + e['duration']).to_datetime if e['time'] && e['duration']
         venue = e['venue']['name'] if e['venue']
+        cost = "$#{e['fee']['amount']}.00" if e['fee']
         {
           attendees: e['yes_rsvp_count'],
+          cost: cost,
           description: e['description'],
           event_type: params['category'],
           event_url: e['event_url'],
@@ -130,10 +133,6 @@ class Event < ActiveRecord::Base
           long: lon,
           name: e['name'],
           source: 'meetup',
-          date_start: nil,
-          date_end: nil,
-          time_start: nil,
-          time_end: nil,
           utc_start: time,
           utc_end: nil,
           venue: venue
@@ -163,6 +162,7 @@ class Event < ActiveRecord::Base
         {
           attendees: nil,
           description: nil,
+          cost: nil,
           event_type: event['type'],
           event_url: event['uri'],
           location: event['venue']['displayName'],
@@ -170,10 +170,6 @@ class Event < ActiveRecord::Base
           long: event['venue']['lng'],
           name: event['displayName'],
           source: 'songkick',
-          date_start: event['start']['date'],
-          date_end: nil,
-          time_start: event['start']['time'],
-          time_end: nil,
           utc_start: datetime,
           utc_end: nil,
           venue: event['venue']['displayName']
