@@ -1,6 +1,7 @@
 class ItinerariesController < ApplicationController
+  # remove this when Devise is set up.
   skip_before_filter  :verify_authenticity_token
-
+  # remove this when Devise is set up.
   def index
     @itineraryList = Itinerary.all
     render json: @itineraryList, status: 200
