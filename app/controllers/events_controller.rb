@@ -1,6 +1,7 @@
 class EventsController < ApplicationController
+  # remove this when Devise is set up.
   skip_before_filter  :verify_authenticity_token
- 
+  # remove this when Devise is set up.
   def index
     #returns all events from eventbrite API, need to change to pull from her endpoint
     @eventList = Event.retrieve_all_events params
