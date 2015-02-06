@@ -14,12 +14,12 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.json { render :json => {:event => @newEvent} }
     end
-    #pushes to EventItinerary
-    @newItin = EventItinerary.new itin_params
-    @newItin.save
-    respond_to do |format|
-      format.json { render :json =>{:event_itineraries => @newItin}}
-    end
+    #pushes to EventItinerary, not currently needed, handled in the itineraries controller.
+    # @newItin = EventItinerary.new itin_params
+    # @newItin.save
+    # respond_to do |format|
+    #   format.json { render :json =>{:event_itineraries => @newItin}}
+    # end
   end
   private
   def itin_params
