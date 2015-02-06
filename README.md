@@ -4,38 +4,92 @@
 
 ## API Endpoints
 
-| prefix                          | Verb   | URI Pattern                                                       | Controller#Action         |
-| --------------------------------|--------|-------------------------------------------------------------------|---------------------------|
-| root                            | GET    | /                                                                 | welcome#index             |
-| events                          | GET    | /events(.:format)                                                 | events#index              |
-|                                 | POST   | /events(.:format)                                                 | events#create             |
-| new_event                       | GET    | /events/new(.:format)                                             | events#new                |
-| edit_event                      | GET    | /events/:id/edit(.:format)                                        | events#edit               |
-| event                           | GET    | /events/:id(.:format)                                             | events#show               |
-|                                 | PATCH  | /events/:id(.:format)                                             | events#update             |
-|                                 | PUT    | /events/:id(.:format)                                             | events#update             |
-| users                           | GET    | /users(.:format)                                                  | users#index               |
-|                                 | POST   | /users(.:format)                                                  | users#create              |
-| new_user                        | GET    | /users/new(.:format)                                              | users#new                 |
-| edit_user                       | GET    | /users/:id/edit(.:format)                                         | users#edit                |
-| user                            | GET    | /users/:id(.:format)                                              | users#show                |
-|                                 | PATCH  | /users/:id(.:format)                                              | users#update              |
-|                                 | PUT    | /users/:id(.:format)                                              | users#update              |
-| eventsapi_index                 | GET    | /eventsapi(.:format)                                              | eventsapi#index           |
-|eventsapi                        | GET    | /eventsapi/:id(.:format)                                          | eventsapi#show            |
-|new_intinerary_event_itinerary   | GET    | /intineraries/:intinerary_id/event_itineraries/new(.:format)      | event_itineraries#new     |
-| edit_intinerary_event_itinerary | GET    | /intineraries/:intinerary_id/event_itineraries/:id/edit(.:format) | event_itineraries#edit    |
-| intinerary_event_itinerary      | GET    | /intineraries/:intinerary_id/event_itineraries/:id(.:format)      | event_itineraries#show    |
-|                                 | DELETE | /intineraries/:intinerary_id/event_itineraries/:id(.:format)      | event_itineraries#destroy |
-| intineraries                    | GET    | /intineraries(.:format)                                           | intineraries#index        |
-|                                 | POST   | /intineraries(.:format)                                           | intineraries#create       |
-| intinerary                      | GET    | /intineraries/:id(.:format)                                       | intineraries#show         |
+# /events?=city%20state or /events?=zip_code
 
+Pulls all events. Returned JSON is:
 
+events: [
+	{
+		attendees: 50,
+		description: "Concert by Laura Joy",
+		cost: 5.00,
+		event_type: "Concert",
+		event_url: "http://www.songkick.com/concerts/22424658-laura-joy-at-trio-grill?utm_source=32298&utm_medium=partner",
+		location: "Trio Grill",
+		lat: 42.2486332,
+		long: -88.6084269,
+		name: "Laura Joy at Trio Grill (April 4, 2015)",
+		source: "songkick",
+		utc_start: "2015-04-04T19:30:00.000-05:00",
+		utc_end: "2015-04-04T19:30:00.000-05:00",
+		venue: "Trio Grill",
+		id: "1"
+	},
+# /user
 
+POST is a new user with JSON of:
 
+ {"user":
+ 	{
+ 	"first":"firstname",
+ 	"last":"lastname",
+ 	"email":"email@email.com",
+ 	"password":"app123"
+ 	}
+ }
 
+ GET returns userinfo
 
- 
+{
+user: [
+	{
+		id: 1,
+		password: "password",
+		created_at: "2015-02-05T19:15:29.657Z",
+		updated_at: "2015-02-05T19:15:29.657Z",
+		first: "Peter",
+		last: "James",
+		email: "peter@gmail.com"
+	}
+]	
 
+# /itineraries
 
+GET returns JSON of:
+{
+	itineraries: [
+		{
+		id: 1,
+		user_id: 1,
+		created_at: "2015-02-05T19:15:29.673Z",
+		updated_at: "2015-02-05T19:15:29.673Z"
+		}
+	]
+}
+
+# /users/:id/itineraries
+
+POST request should be formatted as:
+{"event":
+	[
+		{
+		"name": "Good ole Hodown",
+		"event_type": "Party",
+		"location": "123 Austin St",
+		"utc_start": 1422461610,
+		"utc_end": 1422461620,
+		"attendees": 50,
+		"cost": 3.40,
+		"long": "-97.742105",
+		"lat": "30.269873",
+		"description": "old fashioned fun",
+		"event_url": "http://www.meetup.com/austinrb/events/219854095/",
+		"source": "meetup",
+		"date_start": "null",
+		"date_end": "null",
+		"time_start": "null",
+		"time_end": "null",
+		"venue": "Bucks country grill"
+		}
+	]
+}
