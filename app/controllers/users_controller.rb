@@ -11,12 +11,11 @@ class UsersController < ApplicationController
       format.json { render :json =>{ :user => @newUser } }
     end
   end
-  #shows all users in the database that correspond to the supplied params.
+  #shows all users in the database.
   def index
-    @singleUser = User.all
-    respond_to do |format|
-      format.json {render :json =>{ :user => @singleUser}}
-    end
+    @allUser = User.all 
+    
+      render :json =>{ :user => @allUser}
   end
   # shows single user.
   def show
