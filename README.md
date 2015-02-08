@@ -4,10 +4,10 @@
 
 ## API Endpoints
 
-# /events?=city%20state or /events?=zip_code
+### /events?=city%20state or /events?=zip_code
 
 Pulls all events. Returned JSON is:
-
+```
 events: [
 	{
 		attendees: 50,
@@ -25,10 +25,11 @@ events: [
 		venue: "Trio Grill",
 		id: "1"
 	},
-# /user
+	```
+### /user
 
 POST is a new user with JSON of:
-
+```
  {"user":
  	{
  	"first":"firstname",
@@ -37,9 +38,9 @@ POST is a new user with JSON of:
  	"password":"app123"
  	}
  }
-
+```
  GET returns userinfo
-
+```
 {
 user: [
 	{
@@ -52,10 +53,11 @@ user: [
 		email: "peter@gmail.com"
 	}
 ]	
-
-# /itineraries
+```
+### /itineraries
 
 GET returns JSON of:
+```
 {
 	itineraries: [
 		{
@@ -66,10 +68,12 @@ GET returns JSON of:
 		}
 	]
 }
-
-# /users/:id/itineraries
+```
+### /users/:id/itineraries
 
 POST request should be formatted as:
+
+```
 {"event":
 	[
 		{
@@ -93,3 +97,4 @@ POST request should be formatted as:
 		}
 	]
 }
+```
