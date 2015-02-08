@@ -25,7 +25,7 @@ events: [
 		venue: "Trio Grill",
 		id: "1"
 	},
-	```
+```
 ### /user
 
 POST is a new user with JSON of:
